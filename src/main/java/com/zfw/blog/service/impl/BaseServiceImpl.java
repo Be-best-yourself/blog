@@ -14,9 +14,5 @@ public class BaseServiceImpl<T,ID extends Serializable,TN> implements IBaseServi
 	public T findById(ID id, TN tableName) {
 		return iBaseDao.findById(id, tableName);
 	}
-	public void insert(T t) {
-		iBaseDao.insert(t);
-	}
-	
 
 }

@@ -7,7 +7,7 @@ import com.zfw.blog.dao.IStudentDao;
 import com.zfw.blog.entity.Student;
 import com.zfw.blog.service.IStudentService;
 @Service(IStudentService.SERVICE_NAME)
-public class StudentServiceImpl implements IStudentService {
+public class StudentServiceImpl extends BaseServiceImpl<Student, Integer, String> implements IStudentService {
 	@Autowired
 	private IStudentDao iStudentDao;
 	public void addStudent(Student student) {

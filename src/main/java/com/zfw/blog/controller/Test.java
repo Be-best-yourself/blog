@@ -1,5 +1,7 @@
 package com.zfw.blog.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,14 @@ public class Test extends BaseController{
 		ModelAndView modelAndView = new ModelAndView("test");
 		modelAndView.addObject("student", iStudentService.findStudentById(1));
 		return modelAndView;
+	}
+	@RequestMapping("test3")
+	public ModelAndView test3(){
+		return new ModelAndView().addObject(getUserAgent());
+	}
+	@RequestMapping("test4")
+	public ModelAndView test4(){
+		return new ModelAndView().addObject(iStudentService.findById(1, "test_student"));
 	}
 	
 
