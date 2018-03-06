@@ -78,4 +78,11 @@ public class BaseController {
 		return sessionUser != null ? sessionUser : null;
 	}
 
+	/**
+	 * 得到用户设备
+	 * @return
+	 */
+	protected String getUserAgent(){
+		return request.getHeader("User-Agent");
+	}
 }
