@@ -32,9 +32,6 @@ public class BaseController {
 		this.request = request;
 		this.response = response;
 		this.httpSession = request.getSession();
-		logger.info(this.request.toString());
-		logger.info(this.response.toString());
-		logger.info(this.httpSession.toString());
 	}
 
 	
