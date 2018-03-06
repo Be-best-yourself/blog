@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<mvc:default-servlet-handler/>
+	<!-- 扫描contraller -->
+	<context:component-scan base-package="com.zfw.blog.controller" />
+	<!-- 由于Spring没有默认的FastJson支持，所以我们没办法向Jackson那样让Spring自动注册。
+		不过阿里针对Spring框架也编写了相应的支持类。我们只要向Spring注册一个FastJsonHttpMessageConverter4即可。
+		如果你使用Spring 4.2以下，那么使用FastJsonHttpMessageConverter类；如果使用Spring 4.2以上，使用带4的那个。
+		 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- favorPathExtension(true) 使用后缀方式进行内容协商 favorParameter(false) 禁用使用URL查询方式进行内容协商 
+		ignoreAcceptHeader(true) 忽略请求头部的Accept字段 useJaf(false) 禁用JAF去解析内容类型 defaultContentType(MediaType.APPLICATION_JSON) 
+		设置默认响应消息体内容类型为JSON -->
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="true" />
+		<property name="favorParameter" value="false" />
+		<property name="parameterName" value="format" />
+		<property name="ignoreAcceptHeader" value="true" />
+		<property name="defaultContentType" value="text/html" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="application/xml" />
+			</map>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+		<property name="viewResolvers">
+			<list>
+				<ref bean="internalResourceViewResolver" />
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<!-- 
+					使用jackson
+					<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" 
+					/> -->
+					<!-- 使用fastJson -->
+				<bean class="com.alibaba.fastjson.support.spring.FastJsonJsonView"></bean>
+			</list>
+		</property>
+
+	</bean>
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/classes/jsp/"/>
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+</beans>
