@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -22,17 +21,6 @@ public class BaseController {
 	protected static final String SESSIONUSER = "SESSIONUSER";
 	// 日志
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	protected HttpServletRequest request = null;
-	protected HttpServletResponse response = null;
-	protected HttpSession httpSession = null;
-
-	@ModelAttribute
-	private void init(HttpServletRequest request, HttpServletResponse response) {
-		this.request = request;
-		this.response = response;
-		this.httpSession = request.getSession();
-	}
 
 	
 	/**
@@ -40,7 +28,7 @@ public class BaseController {
 	 * @param httpServletRequest
 	 * @return
 	 */
-	protected Map<String, String> getParam() {
+	protected Map<String, String> getParam(HttpServletRequest request) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		Enumeration<String> parameterNames = request.getParameterNames();
 		while (parameterNames.hasMoreElements()) {
@@ -55,34 +43,42 @@ public class BaseController {
 	 * @param AttributeName
 	 * @param AttributeObj
 	 */
-	protected void setSessionAttribute(String AttributeName, Object AttributeObj) {
-		httpSession.setAttribute(AttributeName, AttributeObj);
+	protected void setSessionAttribute(HttpServletRequest request,String AttributeName, Object AttributeObj) {
+		getSession(request).setAttribute(AttributeName, AttributeObj);
 	}
 
+	private HttpSession getSession(HttpServletRequest request) {
+		return request.getSession();
+	}
+
+	
 	/**
 	 * 通过attributeName获取Session中的对象
 	 * @param AttributeName
 	 * @return
 	 */
-	protected Object getSessionByAttributeName(String AttributeName) {
+	protected Object getSessionByAttributeName(HttpServletRequest request,String AttributeName) {
+		HttpSession httpSession=getSession(request);
 		return httpSession.getAttribute(AttributeName) == null ? null : httpSession.getAttribute(AttributeName);
 	}
 
 	/**
-	 * 获取SessionUser，加上ModelAttribute将SessionUser自动放入modelmap中
+	 * 获取SessionUser，加上ModelAttribute将SessionUser自动放入modelMap中
+	 * @param request
 	 * @return sessionUser
 	 */
 	@ModelAttribute("sessionUser")
-	protected SessionUser getSessionUser() {
-		SessionUser sessionUser = (SessionUser) httpSession.getAttribute(SESSIONUSER);
+	protected SessionUser getSessionUser(HttpServletRequest request) {
+		SessionUser sessionUser = (SessionUser) getSession(request).getAttribute(SESSIONUSER);
 		return sessionUser != null ? sessionUser : null;
 	}
 
 	/**
 	 * 得到用户设备
+	 * @param request
 	 * @return
 	 */
-	protected String getUserAgent(){
+	protected String getUserAgent(HttpServletRequest request){
 		return request.getHeader("User-Agent");
 	}
 }
