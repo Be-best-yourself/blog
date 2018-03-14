@@ -2,6 +2,8 @@ package com.zfw.blog.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,13 +31,12 @@ public class Test extends BaseController{
 		return modelAndView;
 	}
 	@RequestMapping("test3")
-	public ModelAndView test3(){
-		return new ModelAndView().addObject(getUserAgent());
+	public ModelAndView test3(HttpServletRequest request){
+		return new ModelAndView().addObject(getUserAgent(request));
 	}
-	@RequestMapping("test4")
+	/*@RequestMapping("test4")
 	public ModelAndView test4(){
-		return new ModelAndView().addObject(iStudentService.findById(1, "test_student"));
 	}
-	
+	*/
 
 }
