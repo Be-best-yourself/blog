@@ -1,10 +1,21 @@
 package com.zfw.blog.dao;
 
-import java.io.Serializable;
+/**
+ * 封装baseDao，基于当前mybaties代码自动生成的配置工具
+ * @author zhang
+ *
+ * @param <T>
+ */
+public interface IBaseDao<T> {
+	int deleteByPrimaryKey(Integer id);
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-public interface IBaseDao<T,ID extends Serializable,TN> {
-	@Select(value={"select * from test_student where id = #{id}"})
-	T findById(ID id,TN tableName);
+    int insert(T t);
+
+    int insertSelective(T t);
+
+    T selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(T t);
+
+    int updateByPrimaryKey(T t);
 }
