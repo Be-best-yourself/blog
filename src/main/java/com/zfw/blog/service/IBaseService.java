@@ -1,7 +1,15 @@
 package com.zfw.blog.service;
 
-import java.io.Serializable;
+public interface IBaseService<T>{
+	int deleteById(Integer id);
 
-public interface IBaseService<T,ID extends Serializable,TN> {
-	T findById(ID id,TN tableName);
+    int add(T t);
+
+    int addAndGetId(T t);
+
+    T getById(Integer id);
+
+    int updateAndGetId(T t);
+
+    int update(T t);
 }
