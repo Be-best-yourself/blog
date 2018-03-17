@@ -131,7 +131,7 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.0.19</version>
@@ -147,13 +147,13 @@
 					<version>1.8.0</version>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.0.19</version>
-		</dependency> -->
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
