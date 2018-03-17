@@ -6,6 +6,7 @@ package com.zfw.blog.dao;
  *
  * @param <T>
  */
+
 public interface IBaseDao<T> {
 	int deleteByPrimaryKey(Integer id);
 
