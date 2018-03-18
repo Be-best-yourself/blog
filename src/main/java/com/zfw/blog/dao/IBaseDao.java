@@ -2,21 +2,22 @@ package com.zfw.blog.dao;
 
 /**
  * 封装baseDao，基于当前mybaties代码自动生成的配置工具
+ * 
  * @author zhang
  *
  * @param <T>
  */
-
 public interface IBaseDao<T> {
+	
 	int deleteByPrimaryKey(Integer id);
 
-    int insert(T t);
+	int insert(T t);
 
-    int insertSelective(T t);
+	int insertSelective(T t);
 
-    T selectByPrimaryKey(Integer id);
+	T selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(T t);
+	int updateByPrimaryKeySelective(T t);
 
-    int updateByPrimaryKey(T t);
+	int updateByPrimaryKey(T t);
 }
