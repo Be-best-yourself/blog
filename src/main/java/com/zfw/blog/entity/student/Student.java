@@ -2,11 +2,6 @@ package com.zfw.blog.entity.student;
 
 import java.io.Serializable;
 
-/**
- * 仅用于测试
- * @author zhang
- *
- */
 public class Student implements Serializable {
     private Integer id;
 

@@ -1,5 +1,9 @@
 package com.zfw.blog.service.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zfw.blog.dao.IBaseDao;
@@ -12,6 +16,8 @@ import com.zfw.blog.service.IBaseService;
  * @param <T>
  */
 public class BaseServiceImpl<T> implements IBaseService<T> {
+	// 日志
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private IBaseDao<T> iBaseDao;
 	@Override
@@ -42,6 +48,11 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	public int update(T t) {
 		return iBaseDao.updateByPrimaryKey(t);
+	}
+
+	@Override
+	public List<T> getAlls(T t) {
+		return iBaseDao.selectAlls(t);
 	}
 
 

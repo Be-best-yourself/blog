@@ -7,6 +7,4 @@ import com.zfw.blog.service.IStudentService;
 
 @Service(IStudentService.SERVICE_NAME)
 public class StudentServiceImpl extends BaseServiceImpl<Student> implements IStudentService {
-
-
 }

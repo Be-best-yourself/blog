@@ -1,5 +1,7 @@
 package com.zfw.blog.service;
 
+import java.util.List;
+
 public interface IBaseService<T>{
 	int deleteById(Integer id);
 
@@ -12,4 +14,6 @@ public interface IBaseService<T>{
     int updateAndGetId(T t);
 
     int update(T t);
+    
+    List<T> getAlls(T t);
 }

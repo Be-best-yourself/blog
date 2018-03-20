@@ -1,5 +1,7 @@
 package com.zfw.blog.dao;
 
+import java.util.List;
+
 /**
  * 封装baseDao，基于当前mybaties代码自动生成的配置工具
  * 
@@ -20,4 +22,6 @@ public interface IBaseDao<T> {
 	int updateByPrimaryKeySelective(T t);
 
 	int updateByPrimaryKey(T t);
+
+	List<T> selectAlls(T t);
 }

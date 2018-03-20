@@ -1,5 +1,7 @@
 package com.zfw.blog.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.zfw.blog.dao.user.IUserDao;
 import com.zfw.blog.entity.student.Student;
+import com.zfw.blog.entity.user.User;
 import com.zfw.blog.service.IStudentService;
+import com.zfw.blog.service.user.IUserService;
 
 @Controller
 public class TestStudentController extends BaseController{
 	@Autowired
 	private IStudentService studentService;
+	@Autowired
+	private IUserService userService;
 	@RequestMapping("test1")
 	public void test1(){
 		Student student=new Student();
@@ -36,5 +43,18 @@ public class TestStudentController extends BaseController{
 	public ModelAndView test4(){
 	}
 	*/
-
+	@RequestMapping("test5")
+	public ModelAndView test5(){
+		Student student=new Student();
+		student.setName("1");
+		List<Student> selectAlls = studentService.getAlls(student);
+		return new ModelAndView().addObject("students", selectAlls);
+	}
+	@RequestMapping("test6")
+	public ModelAndView testUser(){
+		User t=new User();
+		t.setUserName("zhang");
+		List<User> users = userService.getAlls(t);
+		return new ModelAndView().addObject("users",users);
+	}
 }
