@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zfw.blog.dao.blog.IClassifyDao">
+  <resultMap id="BaseResultMap" type="com.zfw.blog.entity.blog.Classify">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+    <result column="classify_user_id" jdbcType="INTEGER" property="classifyUserId" />
+    <result column="classify_create_time" jdbcType="TIMESTAMP" property="classifyCreateTime" />
+    <result column="classify_modify_time" jdbcType="TIMESTAMP" property="classifyModifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, classify_name, classify_user_id, classify_create_time, classify_modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_classify
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_classify
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zfw.blog.entity.blog.Classify">
+    insert into t_classify (id, classify_name, classify_user_id, 
+      classify_create_time, classify_modify_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{classifyName,jdbcType=VARCHAR}, #{classifyUserId,jdbcType=INTEGER}, 
+      #{classifyCreateTime,jdbcType=TIMESTAMP}, #{classifyModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zfw.blog.entity.blog.Classify">
+    insert into t_classify
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="classifyName != null">
+        classify_name,
+      </if>
+      <if test="classifyUserId != null">
+        classify_user_id,
+      </if>
+      <if test="classifyCreateTime != null">
+        classify_create_time,
+      </if>
+      <if test="classifyModifyTime != null">
+        classify_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="classifyName != null">
+        #{classifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="classifyUserId != null">
+        #{classifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="classifyCreateTime != null">
+        #{classifyCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="classifyModifyTime != null">
+        #{classifyModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zfw.blog.entity.blog.Classify">
+    update t_classify
+    <set>
+      <if test="classifyName != null">
+        classify_name = #{classifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="classifyUserId != null">
+        classify_user_id = #{classifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="classifyCreateTime != null">
+        classify_create_time = #{classifyCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="classifyModifyTime != null">
+        classify_modify_time = #{classifyModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zfw.blog.entity.blog.Classify">
+    update t_classify
+    set classify_name = #{classifyName,jdbcType=VARCHAR},
+      classify_user_id = #{classifyUserId,jdbcType=INTEGER},
+      classify_create_time = #{classifyCreateTime,jdbcType=TIMESTAMP},
+      classify_modify_time = #{classifyModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

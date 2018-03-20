@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zfw.blog.dao.blog.IblogDao">
+  <resultMap id="BaseResultMap" type="com.zfw.blog.entity.blog.Blog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="blog_user_id" jdbcType="INTEGER" property="blogUserId" />
+    <result column="blog_classify_id" jdbcType="INTEGER" property="blogClassifyId" />
+    <result column="blog_name" jdbcType="VARCHAR" property="blogName" />
+    <result column="blog_keyword" jdbcType="VARCHAR" property="blogKeyword" />
+    <result column="blog_title" jdbcType="VARCHAR" property="blogTitle" />
+    <result column="blog_description" jdbcType="VARCHAR" property="blogDescription" />
+    <result column="blog_create_time" jdbcType="TIMESTAMP" property="blogCreateTime" />
+    <result column="blog_modify_time" jdbcType="TIMESTAMP" property="blogModifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, blog_user_id, blog_classify_id, blog_name, blog_keyword, blog_title, blog_description, 
+    blog_create_time, blog_modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_blog
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_blog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zfw.blog.entity.blog.Blog">
+    insert into t_blog (id, blog_user_id, blog_classify_id, 
+      blog_name, blog_keyword, blog_title, 
+      blog_description, blog_create_time, blog_modify_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{blogUserId,jdbcType=INTEGER}, #{blogClassifyId,jdbcType=INTEGER}, 
+      #{blogName,jdbcType=VARCHAR}, #{blogKeyword,jdbcType=VARCHAR}, #{blogTitle,jdbcType=VARCHAR}, 
+      #{blogDescription,jdbcType=VARCHAR}, #{blogCreateTime,jdbcType=TIMESTAMP}, #{blogModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zfw.blog.entity.blog.Blog">
+    insert into t_blog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="blogUserId != null">
+        blog_user_id,
+      </if>
+      <if test="blogClassifyId != null">
+        blog_classify_id,
+      </if>
+      <if test="blogName != null">
+        blog_name,
+      </if>
+      <if test="blogKeyword != null">
+        blog_keyword,
+      </if>
+      <if test="blogTitle != null">
+        blog_title,
+      </if>
+      <if test="blogDescription != null">
+        blog_description,
+      </if>
+      <if test="blogCreateTime != null">
+        blog_create_time,
+      </if>
+      <if test="blogModifyTime != null">
+        blog_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="blogUserId != null">
+        #{blogUserId,jdbcType=INTEGER},
+      </if>
+      <if test="blogClassifyId != null">
+        #{blogClassifyId,jdbcType=INTEGER},
+      </if>
+      <if test="blogName != null">
+        #{blogName,jdbcType=VARCHAR},
+      </if>
+      <if test="blogKeyword != null">
+        #{blogKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="blogTitle != null">
+        #{blogTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="blogDescription != null">
+        #{blogDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="blogCreateTime != null">
+        #{blogCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="blogModifyTime != null">
+        #{blogModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zfw.blog.entity.blog.Blog">
+    update t_blog
+    <set>
+      <if test="blogUserId != null">
+        blog_user_id = #{blogUserId,jdbcType=INTEGER},
+      </if>
+      <if test="blogClassifyId != null">
+        blog_classify_id = #{blogClassifyId,jdbcType=INTEGER},
+      </if>
+      <if test="blogName != null">
+        blog_name = #{blogName,jdbcType=VARCHAR},
+      </if>
+      <if test="blogKeyword != null">
+        blog_keyword = #{blogKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="blogTitle != null">
+        blog_title = #{blogTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="blogDescription != null">
+        blog_description = #{blogDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="blogCreateTime != null">
+        blog_create_time = #{blogCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="blogModifyTime != null">
+        blog_modify_time = #{blogModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zfw.blog.entity.blog.Blog">
+    update t_blog
+    set blog_user_id = #{blogUserId,jdbcType=INTEGER},
+      blog_classify_id = #{blogClassifyId,jdbcType=INTEGER},
+      blog_name = #{blogName,jdbcType=VARCHAR},
+      blog_keyword = #{blogKeyword,jdbcType=VARCHAR},
+      blog_title = #{blogTitle,jdbcType=VARCHAR},
+      blog_description = #{blogDescription,jdbcType=VARCHAR},
+      blog_create_time = #{blogCreateTime,jdbcType=TIMESTAMP},
+      blog_modify_time = #{blogModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
