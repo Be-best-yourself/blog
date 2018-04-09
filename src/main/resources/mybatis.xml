@@ -4,9 +4,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<package name="com.zfw.blog.entity" />
+		<package name="com.blog.entity" />
 	</typeAliases>
 	<mappers>
-		<package name="com.zfw.blog.dao" />
+		<package name="com.blog.dao" />
 	</mappers>
 </configuration>

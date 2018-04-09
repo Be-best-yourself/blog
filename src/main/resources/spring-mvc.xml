@@ -10,7 +10,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<mvc:default-servlet-handler/>
 	<!-- 扫描contraller -->
-	<context:component-scan base-package="com.zfw.blog.controller" />
+	<context:component-scan base-package="com.blog.controller" />
 	<!-- 由于Spring没有默认的FastJson支持，所以我们没办法向Jackson那样让Spring自动注册。
 		不过阿里针对Spring框架也编写了相应的支持类。我们只要向Spring注册一个FastJsonHttpMessageConverter4即可。
 		如果你使用Spring 4.2以下，那么使用FastJsonHttpMessageConverter类；如果使用Spring 4.2以上，使用带4的那个。
