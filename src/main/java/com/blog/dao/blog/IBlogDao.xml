@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zfw.blog.dao.blog.IBlogDao">
-  <resultMap id="BaseResultMap" type="com.zfw.blog.entity.blog.Blog">
+<mapper namespace="com.blog.dao.blog.IBlogDao">
+  <resultMap id="BaseResultMap" type="com.blog.entity.blog.Blog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="blog_user_id" jdbcType="INTEGER" property="blogUserId" />
     <result column="blog_classify_id" jdbcType="INTEGER" property="blogClassifyId" />
@@ -26,7 +26,7 @@
     delete from t_blog
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zfw.blog.entity.blog.Blog">
+  <insert id="insert" parameterType="com.blog.entity.blog.Blog">
     insert into t_blog (id, blog_user_id, blog_classify_id, 
       blog_name, blog_keyword, blog_title, 
       blog_description, blog_create_time, blog_modify_time
@@ -36,7 +36,7 @@
       #{blogDescription,jdbcType=VARCHAR}, #{blogCreateTime,jdbcType=TIMESTAMP}, #{blogModifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zfw.blog.entity.blog.Blog">
+  <insert id="insertSelective" parameterType="com.blog.entity.blog.Blog">
     insert into t_blog
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zfw.blog.entity.blog.Blog">
+  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.blog.Blog">
     update t_blog
     <set>
       <if test="blogUserId != null">
@@ -127,7 +127,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zfw.blog.entity.blog.Blog">
+  <update id="updateByPrimaryKey" parameterType="com.blog.entity.blog.Blog">
     update t_blog
     set blog_user_id = #{blogUserId,jdbcType=INTEGER},
       blog_classify_id = #{blogClassifyId,jdbcType=INTEGER},

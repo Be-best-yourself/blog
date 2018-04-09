@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zfw.blog.dao.blog.IClassifyDao">
-  <resultMap id="BaseResultMap" type="com.zfw.blog.entity.blog.Classify">
+<mapper namespace="com.blog.dao.blog.IClassifyDao">
+  <resultMap id="BaseResultMap" type="com.blog.entity.blog.Classify">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
     <result column="classify_user_id" jdbcType="INTEGER" property="classifyUserId" />
@@ -21,7 +21,7 @@
     delete from t_classify
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zfw.blog.entity.blog.Classify">
+  <insert id="insert" parameterType="com.blog.entity.blog.Classify">
     insert into t_classify (id, classify_name, classify_user_id, 
       classify_create_time, classify_modify_time
       )
@@ -29,7 +29,7 @@
       #{classifyCreateTime,jdbcType=TIMESTAMP}, #{classifyModifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zfw.blog.entity.blog.Classify">
+  <insert id="insertSelective" parameterType="com.blog.entity.blog.Classify">
     insert into t_classify
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -66,7 +66,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zfw.blog.entity.blog.Classify">
+  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.blog.Classify">
     update t_classify
     <set>
       <if test="classifyName != null">
@@ -84,7 +84,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zfw.blog.entity.blog.Classify">
+  <update id="updateByPrimaryKey" parameterType="com.blog.entity.blog.Classify">
     update t_classify
     set classify_name = #{classifyName,jdbcType=VARCHAR},
       classify_user_id = #{classifyUserId,jdbcType=INTEGER},
