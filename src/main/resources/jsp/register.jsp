@@ -10,6 +10,14 @@
 <title>用户注册</title>
 </head>
 <body>
+<form action="user" method="post">
+	userName:<input type="text" name="userName">
+	<br><br>
+	password:<input type="password" name="userPassword">
+	<br><br>
+	<input type="submit" value="submit">
+
+</form>
 
 </body>
 </html>

@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop 
         http://www.springframework.org/schema/aop/spring-aop.xsd">
-	<context:property-placeholder location="classpath:db.properties" />
+	<context:property-placeholder location="classpath:db.properties,classpath:redis.properties" />
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="${db.driver}" />
 		<property name="url" value="${db.url}" />

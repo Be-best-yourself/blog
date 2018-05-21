@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!--将缓存管理器，交给安全管理器 -->
+		<property name="cacheManager" ref="shiroSpringCacheManager" />
+		<property name="sessionManager" ref="sessionManager"></property>
+		<property name="authenticator" ref="authenticator"></property>
+		<property name="realms">
+			<list>
+				<ref bean="myRealm" />
+				<ref bean="secondRealm" />
+			</list>
+		</property>
+		<property name="rememberMeManager.cookie.maxAge" value="20"></property>
+	</bean>
+
+	<bean id="myRealm" class="com.blog.shiro.realms.ShiroRealm">
+		<!-- 为realm设置密码加密器 -->
+		<property name="credentialsMatcher">
+			<!-- 为credentialsMatcher加密器设置加密类型 -->
+			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<!-- 设置加密属性 -->
+				<property name="hashAlgorithmName" value="MD5" />
+				<!-- 加密次数 -->
+				<property name="hashIterations" value="1024" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="secondRealm" class="com.blog.shiro.realms.SecondRealm">
+		<!-- 为realm设置密码加密器 -->
+		<property name="credentialsMatcher">
+			<!-- 为credentialsMatcher加密器设置加密类型 -->
+			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<!-- 设置加密属性 -->
+				<property name="hashAlgorithmName" value="SHA1" />
+				<!-- 加密次数 -->
+				<property name="hashIterations" value="1024" />
+			</bean>
+		</property>
+	</bean>
+	<!-- 多reaml验证策略 -->
+	<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+		<property name="authenticationStrategy">
+			<!-- 只要有一个reaml成功的就行 -->
+			<bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean>
+		</property>
+	</bean>
+
+	<!-- 配置shiro生命周期bean后处理器，可以自动调用配置在Spring IOC 中 shiro bean的生命周期方法 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- Enable Shiro Annotations for Spring-configured beans. Only run after 
+		the lifecycleBeanProcessor has run: -->
+	<!-- 启用Shiro注解，仅在配置了 lifecycleBeanPostProcessor后生效 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" />
+	<!-- 配置自定义缓存管理器，中引入redis缓存管理器 -->
+	<bean id="shiroSpringCacheManager" class="com.blog.shiro.ShiroSpringCacheManager">
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<!-- sesisonCookie 设置 -->
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<!-- cookie的名字 -->
+		<constructor-arg value="sessionIdCookie" />
+		<property name="httpOnly" value="true" />
+		<!-- 30分钟 单位是秒 -->
+		<property name="maxAge" value="1800" />
+	</bean>
+	<!-- 会话DAO 用于会话的CRUD -->
+	<bean id="sessionDAO"
+		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		<!-- Session缓存名字，配置30分钟过期 -->
+		<property name="activeSessionsCacheName" value="shiro-activeSessionCache" />
+		<property name="cacheManager" ref="shiroSpringCacheManager" />
+	</bean>
+	<!-- 会话管理器 -->
+	<bean id="sessionManager"
+		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- 设置全局会话超时时间 半小时 单位是毫秒 -->
+		<property name="globalSessionTimeout" value="1800000" />
+		<!-- url上带sessionId 默认为true -->
+		<property name="sessionIdUrlRewritingEnabled" value="false" />
+		<property name="sessionIdCookie" ref="sessionIdCookie" />
+		<property name="sessionDAO" ref="sessionDAO" />
+	</bean>
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login.jsp" />
+		<property name="successUrl" value="/success.jsp" />
+		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
+		<property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>
+	</bean>
+	<!-- 配置一个 bean, 该 bean 实际上是一个 Map. 通过实例工厂方法的方式 -->
+	<bean id="filterChainDefinitionMap" factory-bean="filterChainDefinitionMapBuilder"
+		factory-method="builderChainDefinitionMap">
+	</bean>
+	<bean id="filterChainDefinitionMapBuilder" class="com.blog.shiro.FilterChainDefinitionMapBuilder"></bean>
+
+</beans>
