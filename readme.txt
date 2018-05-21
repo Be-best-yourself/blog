@@ -10,3 +10,8 @@ mybaties-generator工具使用
 2.在goals中输入：mybatis-generator:generate
 3.在generatorConfig.xml中<table></table>加入要生成的表名
 4.run
+
+-------------------------------------
+//TODO
+集成Shiro+redis
+有一个问题，remaberMe无效，问题可能出SessionCache中
