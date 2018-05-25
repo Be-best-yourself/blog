@@ -100,3 +100,17 @@ create table t_user (
   primary key (id),
   unique key user_name_phone_email (user_name,user_real_name,user_phone,user_email) comment '用户名，手机号，邮箱唯一'
 ) engine=innodb default charset=utf8;
+
+------------------
+-----用户角色表------
+------------------
+
+create table t_user_role (
+  id int(11) not null auto_increment,
+  user_id int(11) not null comment '用户id',
+  role_id int(11) not null comment '角色id',
+  create_time datetime default null on update current_timestamp comment '创建时间',
+  primary key (id),
+  key user_role_userid_and_roleid (user_id,role_id) using hash comment '为用户角色关联表创建hash索引'
+) engine=innodb default charset=utf8;
+
