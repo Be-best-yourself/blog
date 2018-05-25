@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.user.IRoleDao">
+	<resultMap id="BaseResultMap" type="com.blog.entity.user.Role">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+		<result column="role_name" jdbcType="VARCHAR" property="roleName" />
+		<result column="role_dtl" jdbcType="VARCHAR" property="roleDtl" />
+		<result column="role_permission_ids" jdbcType="VARCHAR"
+			property="rolePermissionIds" />
+		<result column="role_status" jdbcType="INTEGER" property="roleStatus" />
+		<result column="role_create_time" jdbcType="TIMESTAMP"
+			property="roleCreateTime" />
+		<result column="role_modify_time" jdbcType="TIMESTAMP"
+			property="roleModifyTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, role_code, role_name, role_dtl, role_permission_ids, role_status,
+		role_create_time,
+		role_modify_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_role
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.blog.entity.user.Role">
+		insert into t_role (id, role_code, role_name,
+		role_dtl, role_permission_ids, role_status,
+		role_create_time, role_modify_time)
+		values (#{id,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR},
+		#{roleName,jdbcType=VARCHAR},
+		#{roleDtl,jdbcType=VARCHAR}, #{rolePermissionIds,jdbcType=VARCHAR},
+		#{roleStatus,jdbcType=INTEGER},
+		#{roleCreateTime,jdbcType=TIMESTAMP}, #{roleModifyTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.blog.entity.user.Role">
+		insert into t_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="roleCode != null">
+				role_code,
+			</if>
+			<if test="roleName != null">
+				role_name,
+			</if>
+			<if test="roleDtl != null">
+				role_dtl,
+			</if>
+			<if test="rolePermissionIds != null">
+				role_permission_ids,
+			</if>
+			<if test="roleStatus != null">
+				role_status,
+			</if>
+			<if test="roleCreateTime != null">
+				role_create_time,
+			</if>
+			<if test="roleModifyTime != null">
+				role_modify_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="roleCode != null">
+				#{roleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDtl != null">
+				#{roleDtl,jdbcType=VARCHAR},
+			</if>
+			<if test="rolePermissionIds != null">
+				#{rolePermissionIds,jdbcType=VARCHAR},
+			</if>
+			<if test="roleStatus != null">
+				#{roleStatus,jdbcType=INTEGER},
+			</if>
+			<if test="roleCreateTime != null">
+				#{roleCreateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="roleModifyTime != null">
+				#{roleModifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.user.Role">
+		update t_role
+		<set>
+			<if test="roleCode != null">
+				role_code = #{roleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				role_name = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleDtl != null">
+				role_dtl = #{roleDtl,jdbcType=VARCHAR},
+			</if>
+			<if test="rolePermissionIds != null">
+				role_permission_ids = #{rolePermissionIds,jdbcType=VARCHAR},
+			</if>
+			<if test="roleStatus != null">
+				role_status = #{roleStatus,jdbcType=INTEGER},
+			</if>
+			<if test="roleCreateTime != null">
+				role_create_time = #{roleCreateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="roleModifyTime != null">
+				role_modify_time = #{roleModifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.blog.entity.user.Role">
+		update t_role
+		set role_code = #{roleCode,jdbcType=VARCHAR},
+		role_name = #{roleName,jdbcType=VARCHAR},
+		role_dtl = #{roleDtl,jdbcType=VARCHAR},
+		role_permission_ids = #{rolePermissionIds,jdbcType=VARCHAR},
+		role_status = #{roleStatus,jdbcType=INTEGER},
+		role_create_time = #{roleCreateTime,jdbcType=TIMESTAMP},
+		role_modify_time = #{roleModifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectAlls" parameterType="com.blog.entity.user.Role"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		<where>
+			<if test="roleCode != null">
+				and role_code = #{roleCode,jdbcType=VARCHAR}
+			</if>
+			<if test="roleName != null">
+				and role_name = #{roleName,jdbcType=VARCHAR}
+			</if>
+			<if test="roleDtl != null">
+				and role_dtl = #{roleDtl,jdbcType=VARCHAR}
+			</if>
+			<if test="rolePermissionIds != null">
+				and role_permission_ids = #{rolePermissionIds,jdbcType=VARCHAR}
+			</if>
+			<if test="roleStatus != null">
+				and role_status = #{roleStatus,jdbcType=INTEGER}
+			</if>
+			<if test="roleCreateTime != null">
+				and role_create_time = #{roleCreateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="roleModifyTime != null">
+				and role_modify_time = #{roleModifyTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -7,8 +7,7 @@ public class FilterChainDefinitionMapBuilder {
 
 	public LinkedHashMap<String,String> builderChainDefinitionMap(){
 		LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<String,String>();
-		filterChainDefinitionMap.put("/toRegister", "anon");
-		filterChainDefinitionMap.put("/user", "anon");
+		filterChainDefinitionMap.put("/user/*", "anon");
 		filterChainDefinitionMap.put("/**", "authc");
 		return filterChainDefinitionMap;
 	}

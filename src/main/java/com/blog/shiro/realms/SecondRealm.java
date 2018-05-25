@@ -1,4 +1,4 @@
-package com.blog.shiro.realms;
+/*package com.blog.shiro.realms;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -56,3 +56,4 @@ public class SecondRealm extends AuthenticatingRealm {
 			System.out.println(hash);
 		}
 }
+*/

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.user.IPermissionDao">
+	<resultMap id="BaseResultMap" type="com.blog.entity.user.Permission">
+		<id column="p_id" jdbcType="INTEGER" property="pId" />
+		<result column="p_code" jdbcType="VARCHAR" property="pCode" />
+		<result column="p_dtl" jdbcType="VARCHAR" property="pDtl" />
+		<result column="p_name" jdbcType="VARCHAR" property="pName" />
+		<result column="p_status" jdbcType="INTEGER" property="pStatus" />
+		<result column="p_create_time" jdbcType="TIMESTAMP" property="pCreateTime" />
+		<result column="p_modify_time" jdbcType="TIMESTAMP" property="pModifyTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		p_id, p_code, p_dtl, p_name, p_status, p_create_time, p_modify_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission
+		where p_id = #{pId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_permission
+		where p_id = #{pId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.blog.entity.user.Permission">
+		insert into t_permission (p_id, p_code, p_dtl,
+		p_name, p_status, p_create_time,
+		p_modify_time)
+		values (#{pId,jdbcType=INTEGER}, #{pCode,jdbcType=VARCHAR},
+		#{pDtl,jdbcType=VARCHAR},
+		#{pName,jdbcType=VARCHAR}, #{pStatus,jdbcType=INTEGER}, #{pCreateTime,jdbcType=TIMESTAMP},
+		#{pModifyTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.blog.entity.user.Permission">
+		insert into t_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pId != null">
+				p_id,
+			</if>
+			<if test="pCode != null">
+				p_code,
+			</if>
+			<if test="pDtl != null">
+				p_dtl,
+			</if>
+			<if test="pName != null">
+				p_name,
+			</if>
+			<if test="pStatus != null">
+				p_status,
+			</if>
+			<if test="pCreateTime != null">
+				p_create_time,
+			</if>
+			<if test="pModifyTime != null">
+				p_modify_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pId != null">
+				#{pId,jdbcType=INTEGER},
+			</if>
+			<if test="pCode != null">
+				#{pCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pDtl != null">
+				#{pDtl,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				#{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pStatus != null">
+				#{pStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pCreateTime != null">
+				#{pCreateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="pModifyTime != null">
+				#{pModifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.user.Permission">
+		update t_permission
+		<set>
+			<if test="pCode != null">
+				p_code = #{pCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pDtl != null">
+				p_dtl = #{pDtl,jdbcType=VARCHAR},
+			</if>
+			<if test="pName != null">
+				p_name = #{pName,jdbcType=VARCHAR},
+			</if>
+			<if test="pStatus != null">
+				p_status = #{pStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pCreateTime != null">
+				p_create_time = #{pCreateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="pModifyTime != null">
+				p_modify_time = #{pModifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where p_id = #{pId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.blog.entity.user.Permission">
+		update t_permission
+		set p_code = #{pCode,jdbcType=VARCHAR},
+		p_dtl = #{pDtl,jdbcType=VARCHAR},
+		p_name = #{pName,jdbcType=VARCHAR},
+		p_status = #{pStatus,jdbcType=INTEGER},
+		p_create_time = #{pCreateTime,jdbcType=TIMESTAMP},
+		p_modify_time = #{pModifyTime,jdbcType=TIMESTAMP}
+		where p_id = #{pId,jdbcType=INTEGER}
+	</update>
+	<select id="selectAlls" parameterType="com.blog.entity.user.UserRole"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_permission
+		<where>
+			<if test="pCode != null">
+				and p_code = #{pCode,jdbcType=VARCHAR}
+			</if>
+			<if test="pDtl != null">
+				and p_dtl = #{pDtl,jdbcType=VARCHAR}
+			</if>
+			<if test="pName != null">
+				and p_name = #{pName,jdbcType=VARCHAR}
+			</if>
+			<if test="pStatus != null">
+				and p_status = #{pStatus,jdbcType=INTEGER}
+			</if>
+			<if test="pCreateTime != null">
+				and p_create_time = #{pCreateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="pModifyTime != null">
+				and p_modify_time = #{pModifyTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>
