@@ -10,10 +10,9 @@
 		<property name="realms">
 			<list>
 				<ref bean="myRealm" />
-				<ref bean="secondRealm" />
 			</list>
 		</property>
-		<property name="rememberMeManager.cookie.maxAge" value="20"></property>
+		<!-- <property name="rememberMeManager.cookie.maxAge" value="20"></property> -->
 	</bean>
 
 	<bean id="myRealm" class="com.blog.shiro.realms.ShiroRealm">
@@ -28,23 +27,23 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="secondRealm" class="com.blog.shiro.realms.SecondRealm">
-		<!-- 为realm设置密码加密器 -->
+<!-- 	<bean id="secondRealm" class="com.blog.shiro.realms.SecondRealm">
+		为realm设置密码加密器
 		<property name="credentialsMatcher">
-			<!-- 为credentialsMatcher加密器设置加密类型 -->
+			为credentialsMatcher加密器设置加密类型
 			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-				<!-- 设置加密属性 -->
+				设置加密属性
 				<property name="hashAlgorithmName" value="SHA1" />
-				<!-- 加密次数 -->
+				加密次数
 				<property name="hashIterations" value="1024" />
 			</bean>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- 多reaml验证策略 -->
 	<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
 		<property name="authenticationStrategy">
 			<!-- 只要有一个reaml成功的就行 -->
-			<bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean>
+			<bean class="org.apache.shiro.authc.pam.FirstSuccessfulStrategy"></bean>
 		</property>
 	</bean>
 
