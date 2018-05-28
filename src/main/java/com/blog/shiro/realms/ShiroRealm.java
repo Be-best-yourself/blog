@@ -68,7 +68,6 @@ public class ShiroRealm extends AuthorizingRealm {
 		Object principal = users.get(0);
 		// credentials:密码
 		Object credentials = users.get(0).getUserPasswordSalt();
-		System.out.println(credentials);
 		// 盐值
 		ByteSource credentialsSalt = ByteSource.Util.bytes(userName);
 		// realmName:当前realm对象的name,调用父类的getName()方法即可
