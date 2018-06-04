@@ -9,6 +9,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	<mvc:default-servlet-handler/>
+	<mvc:resources location="/WEB-INF/classes/common/" mapping="/common/**"/>
 	<!-- 扫描contraller -->
 	<context:component-scan base-package="com.blog.controller" />
 	<!-- 由于Spring没有默认的FastJson支持，所以我们没办法向Jackson那样让Spring自动注册。
