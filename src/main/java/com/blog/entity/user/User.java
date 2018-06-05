@@ -27,8 +27,18 @@ public class User implements Serializable {
     private Date userCreateTime;
 
     private Date userModifyTime;
+    
+    private String userLogo;
 
-    private static final long serialVersionUID = 1L;
+    public String getUserLogo() {
+		return userLogo;
+	}
+
+	public void setUserLogo(String userLogo) {
+		this.userLogo = userLogo;
+	}
+
+	private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -189,6 +199,7 @@ public class User implements Serializable {
         sb.append(", userStatus=").append(userStatus);
         sb.append(", userCreateTime=").append(userCreateTime);
         sb.append(", userModifyTime=").append(userModifyTime);
+        sb.append(", userLogo=").append(userLogo);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
