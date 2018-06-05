@@ -59,7 +59,7 @@
 
 				<entry key="authorizationCache" value="1800"></entry>
 				<entry key="authenticationCache" value="1800"></entry>
-				<entry key="shiro-activeSessionCache" value="30"></entry>
+				<entry key="shiro-activeSessionCache" value="1800"></entry>
 			</map>
 		</property>
 	</bean>
