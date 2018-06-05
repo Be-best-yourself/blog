@@ -1,5 +1,7 @@
 package com.blog.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -78,12 +80,16 @@ public class UserController extends BaseController {
 				mv.setViewName("login");//尝试认证次数多余系统指定次数 ...  
 			} catch ( AuthenticationException ae ) {  
 				ae.printStackTrace();
-				logger.info("他未指定异常  ");
+				logger.info("其他未指定异常  ");
 				mv.addObject("user", user);
 				mv.setViewName("login");
 			//其他未指定异常  
 			}  
 		}
 		return mv;
+	}
+	@RequestMapping("/index")
+	public ModelAndView index(HttpServletRequest request){
+		return new ModelAndView("index");
 	}
 }
