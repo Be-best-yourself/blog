@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="../common/css/boostrap_css.jsp"%>
+<%@include file="../common/css/bootstrap_css.jsp"%>
 <%@include file="../common/js/jquery_3.2.1.jsp"%>
-<%@include file="../common/js/boostrap_js.jsp"%>
+<%@include file="../common/js/bootstrap_js.jsp"%>
 <title>用户注册</title>
 </head>
 <body>
