@@ -88,7 +88,7 @@
 	</bean>
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login.jsp" />
+		<property name="loginUrl" value="/user/toLogin" />
 		<property name="successUrl" value="/success.jsp" />
 		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
 		<property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>

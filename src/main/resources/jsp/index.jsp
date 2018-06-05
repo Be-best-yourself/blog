@@ -2,15 +2,15 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
-<%@include file="../../common/basePath.jsp" %>
+<%@include file="../common/basePath.jsp" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="../../common/css/bootstrap_css.jsp"%>
-<%@include file="../../common/js/jquery_3.2.1.jsp"%>
-<%@include file="../../common/js/bootstrap_js.jsp"%>
+<%@include file="../common/css/bootstrap_css.jsp"%>
+<%@include file="../common/js/jquery_3.2.1.jsp"%>
+<%@include file="../common/js/bootstrap_js.jsp"%>
 <title>模板</title>
 <style type="text/css">
 header {
@@ -58,16 +58,6 @@ header {
 		</div>
 	</header>
 	<article class="container">
-		<!-- 加载编辑器的容器 -->
-		<script id="editor" style="width: 100%;height: 100%" name="content" type="text/plain"> <span style="font-family: &quot;comic sans ms&quot;; color: rgb(216, 216, 216);">别压抑自己，请开始你的表演……</span></script>
-		<!-- 配置文件 -->
-		<%@include file="../../common/ueditor/ueditor.jsp"%>
-		<!-- 实例化编辑器 -->
-		<script type="text/javascript">
-			var ue = UE.getEditor('editor', {
-				//focus时自动清空初始化时的内容
-				autoClearinitialContent : true,
-			});
 		</script>
 	</article>
 	<footer>脚</footer>

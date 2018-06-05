@@ -49,8 +49,8 @@
 		</javaClientGenerator>
 
 		<!-- 要生成哪些表,多个表，依次加入table标签 -->
-		<table tableName="t_user_role" domainObjectName="user.UserRole"
-			mapperName="user.IUserRole"
+		<table tableName="t_classify" domainObjectName="blog.Classify"
+			mapperName="blog.IClassifyDao"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">
