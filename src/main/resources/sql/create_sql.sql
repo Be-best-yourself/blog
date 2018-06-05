@@ -44,13 +44,14 @@ insert into t_role values ('1', 'admin', '系统管理员', '此角色能操作�
 create table t_classify (
   id int(11) not null auto_increment,
   classify_name varchar(32) not null comment '分类名字，如mysql,java',
+  classify_parent_id int(11) default '0' comment '父类id，默认为0,为第一级分类',
+  classify_description varchar(255) default null comment '分类描述',
   classify_user_id int(11) default null comment '此分类归属哪个用户',
   classify_create_time datetime default null on update current_timestamp comment '分类创建时间',
   classify_modify_time datetime default null on update current_timestamp comment '修改时间',
   primary key (id),
   key classify_user_id (classify_user_id) using hash comment '分类归属哪个用户创建索引'
 ) engine=innodb default charset=utf8;
-
 
 -------------------
 -------博客表--------
@@ -61,8 +62,8 @@ create table t_blog (
   blog_classify_id int(11) default null comment '博客分类id,引用分类表中的id,多个分类以逗号分隔',
   blog_name varchar(64) not null comment '博文名字',
   blog_keyword varchar(255) not null comment '博客关键字，写入html中keyword中，方便百度收录',
-  blog_title varchar(64) not null comment '博客描述',
-  blog_description varchar(255) not null comment '博客名称',
+  blog_title varchar(64) not null comment '博客名称',
+  blog_description varchar(255) not null comment '博客描述',
   blog_create_time datetime default null on update current_timestamp comment '博客创建时间',
   blog_modify_time datetime default null on update current_timestamp comment '博客修改时间',
   primary key (id),
@@ -97,6 +98,7 @@ create table t_user (
   user_status int(11) not null default '0' comment '用户当前状态，0,可用，1,不可用，2,被锁定 默认0可用',
   user_create_time datetime not null default current_timestamp on update current_timestamp comment ' 用户创建时间',
   user_modify_time datetime default null on update current_timestamp comment '用户最后一次编辑时间',
+  user_logo varchar(255) default null comment '用户头像',
   primary key (id),
   unique key user_name_phone_email (user_name,user_real_name,user_phone,user_email) comment '用户名，手机号，邮箱唯一'
 ) engine=innodb default charset=utf8;
