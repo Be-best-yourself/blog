@@ -1,0 +1,121 @@
+/* 后台css样式 */
+@CHARSET "UTF-8";
+body, .body {
+	background: #fff;
+	margin: 0px;
+}
+
+/* header*/
+.header {
+	width: 100%;
+	height: 72px;
+	min-width: 1000px;
+	background: #fff;
+	text-align: center;
+	border-bottom: 1px solid #d4d4d4;
+}
+
+.logo {
+	float: left;
+	margin-left: 50px;
+}
+
+.logo>img {
+	width: 50px;
+	height: 50px;
+	margin-top: 10px;
+	border-radius: 20px
+}
+
+.user {
+	float: right;
+	width: 25%;
+	height: 100%
+}
+
+.user>.userLogo>img {
+	float: left;
+	width: 50px;
+	height: 50px;
+	margin-top: 10px;
+	border-radius: 20px
+}
+
+.user>.userinfo {
+	font-family: -webkit-pictograph;
+	font-size: 16px;
+	float: left;
+	margin-left: 10px;
+	margin-top: 25px;
+}
+
+.user>.logout {
+	float: right;
+	margin-right: 40px;
+	margin-top: 20px;
+}
+
+.user>.logout>a {
+	color: #dbdbdb;
+	font-size: 14px;
+	padding-left: 8px;
+	border-left: 1px solid #dbdbdb;
+	text-decoration: none
+}
+
+.clear {
+	height: 0px;
+	font-size: 0;
+	clear: both;
+}
+
+
+/* 主体css */
+.content {
+	padding-right: 15px;
+	padding-left: 15px;
+	padding-top:15px;
+	border-top: 1px solid #eee;
+	background: #fff;
+}
+
+
+/* 左侧菜单css */
+.container-left {
+	background: #fff;
+	float: left;
+	width: 150px;
+	border: 1px solid #eee;
+}
+
+.container-left>ul {
+	list-style: none;
+	line-height: 2.5;
+	padding-left: 0px;
+	margin-left: 30px;
+	text-align: left;
+}
+
+.container-left>ul>li>a {
+	display: block;
+	text-decoration: inherit;
+}
+
+.container-left>ul>li>a:hover {
+	border-right: 1px solid #563d7c;
+	color: #563d7c;
+	display: block;
+}
+
+.active {
+	border-right: 4px solid #563d7c;
+	color: #563d7c;
+	display: block;
+}
+
+/* 右侧内容 */
+.container-right{
+	margin-left:165px;
+	height: 100%;
+	border-left: 1px solid #eee;
+}

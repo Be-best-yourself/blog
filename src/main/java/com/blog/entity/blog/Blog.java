@@ -16,6 +16,8 @@ public class Blog implements Serializable {
 
     private String blogTitle;
 
+    private Integer blogStatus;
+
     private String blogDescription;
 
     private Date blogCreateTime;
@@ -72,6 +74,14 @@ public class Blog implements Serializable {
         this.blogTitle = blogTitle == null ? null : blogTitle.trim();
     }
 
+    public Integer getBlogStatus() {
+        return blogStatus;
+    }
+
+    public void setBlogStatus(Integer blogStatus) {
+        this.blogStatus = blogStatus;
+    }
+
     public String getBlogDescription() {
         return blogDescription;
     }
@@ -114,6 +124,7 @@ public class Blog implements Serializable {
             && (this.getBlogName() == null ? other.getBlogName() == null : this.getBlogName().equals(other.getBlogName()))
             && (this.getBlogKeyword() == null ? other.getBlogKeyword() == null : this.getBlogKeyword().equals(other.getBlogKeyword()))
             && (this.getBlogTitle() == null ? other.getBlogTitle() == null : this.getBlogTitle().equals(other.getBlogTitle()))
+            && (this.getBlogStatus() == null ? other.getBlogStatus() == null : this.getBlogStatus().equals(other.getBlogStatus()))
             && (this.getBlogDescription() == null ? other.getBlogDescription() == null : this.getBlogDescription().equals(other.getBlogDescription()))
             && (this.getBlogCreateTime() == null ? other.getBlogCreateTime() == null : this.getBlogCreateTime().equals(other.getBlogCreateTime()))
             && (this.getBlogModifyTime() == null ? other.getBlogModifyTime() == null : this.getBlogModifyTime().equals(other.getBlogModifyTime()));
@@ -129,6 +140,7 @@ public class Blog implements Serializable {
         result = prime * result + ((getBlogName() == null) ? 0 : getBlogName().hashCode());
         result = prime * result + ((getBlogKeyword() == null) ? 0 : getBlogKeyword().hashCode());
         result = prime * result + ((getBlogTitle() == null) ? 0 : getBlogTitle().hashCode());
+        result = prime * result + ((getBlogStatus() == null) ? 0 : getBlogStatus().hashCode());
         result = prime * result + ((getBlogDescription() == null) ? 0 : getBlogDescription().hashCode());
         result = prime * result + ((getBlogCreateTime() == null) ? 0 : getBlogCreateTime().hashCode());
         result = prime * result + ((getBlogModifyTime() == null) ? 0 : getBlogModifyTime().hashCode());
@@ -147,6 +159,7 @@ public class Blog implements Serializable {
         sb.append(", blogName=").append(blogName);
         sb.append(", blogKeyword=").append(blogKeyword);
         sb.append(", blogTitle=").append(blogTitle);
+        sb.append(", blogStatus=").append(blogStatus);
         sb.append(", blogDescription=").append(blogDescription);
         sb.append(", blogCreateTime=").append(blogCreateTime);
         sb.append(", blogModifyTime=").append(blogModifyTime);

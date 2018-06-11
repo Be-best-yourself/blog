@@ -3,21 +3,28 @@
 <mapper namespace="com.blog.dao.blog.IClassifyDao">
 	<resultMap id="BaseResultMap" type="com.blog.entity.blog.Classify">
 		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="classify_level" jdbcType="INTEGER" property="classifyLevel" />
 		<result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+		<result column="classify_path" jdbcType="VARCHAR" property="classifyPath" />
 		<result column="classify_parent_id" jdbcType="INTEGER"
 			property="classifyParentId" />
+		<result column="classify_user_id" jdbcType="INTEGER" property="classifyUserId" />
+		<result column="classify_blog_num" jdbcType="INTEGER" property="classifyBlogNum" />
 		<result column="classify_description" jdbcType="VARCHAR"
 			property="classifyDescription" />
-		<result column="classify_user_id" jdbcType="INTEGER" property="classifyUserId" />
 		<result column="classify_create_time" jdbcType="TIMESTAMP"
 			property="classifyCreateTime" />
 		<result column="classify_modify_time" jdbcType="TIMESTAMP"
 			property="classifyModifyTime" />
+		<result column="classify_status" jdbcType="INTEGER" property="classifyStatus" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, classify_name, classify_parent_id, classify_description,
-		classify_user_id, classify_create_time,
-		classify_modify_time
+		id, classify_level, classify_name, classify_path,
+		classify_parent_id,
+		classify_user_id,
+		classify_blog_num,
+		classify_description, classify_create_time,
+		classify_modify_time,classify_status
 	</sql>
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
 		resultMap="BaseResultMap">
@@ -27,19 +34,29 @@
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from t_classify
+		delete from
+		t_classify
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert" parameterType="com.blog.entity.blog.Classify">
-		insert into t_classify (id, classify_name, classify_parent_id,
-		classify_description, classify_user_id, classify_create_time,
-		classify_modify_time)
-		values (#{id,jdbcType=INTEGER}, #{classifyName,jdbcType=VARCHAR},
+		insert into t_classify (id,
+		classify_level, classify_name,
+		classify_path, classify_parent_id,
+		classify_user_id,
+		classify_blog_num, classify_description,
+		classify_create_time,
+		classify_modify_time,classify_status)
+		values
+		(#{id,jdbcType=INTEGER}, #{classifyLevel,jdbcType=INTEGER},
+		#{classifyName,jdbcType=VARCHAR},
+		#{classifyPath,jdbcType=VARCHAR},
 		#{classifyParentId,jdbcType=INTEGER},
-		#{classifyDescription,jdbcType=VARCHAR},
 		#{classifyUserId,jdbcType=INTEGER},
+		#{classifyBlogNum,jdbcType=INTEGER},
+		#{classifyDescription,jdbcType=VARCHAR},
 		#{classifyCreateTime,jdbcType=TIMESTAMP},
-		#{classifyModifyTime,jdbcType=TIMESTAMP})
+		#{classifyModifyTime,jdbcType=TIMESTAMP},
+		#{classifyStatus,jdbcType=INTEGER})
 	</insert>
 	<insert id="insertSelective" parameterType="com.blog.entity.blog.Classify">
 		insert into t_classify
@@ -47,17 +64,26 @@
 			<if test="id != null">
 				id,
 			</if>
+			<if test="classifyLevel != null">
+				classify_level,
+			</if>
 			<if test="classifyName != null">
 				classify_name,
+			</if>
+			<if test="classifyPath != null">
+				classify_path,
 			</if>
 			<if test="classifyParentId != null">
 				classify_parent_id,
 			</if>
-			<if test="classifyDescription != null">
-				classify_description,
-			</if>
 			<if test="classifyUserId != null">
 				classify_user_id,
+			</if>
+			<if test="classifyBlogNum != null">
+				classify_blog_num,
+			</if>
+			<if test="classifyDescription != null">
+				classify_description,
 			</if>
 			<if test="classifyCreateTime != null">
 				classify_create_time,
@@ -65,22 +91,34 @@
 			<if test="classifyModifyTime != null">
 				classify_modify_time,
 			</if>
+			<if test="classifyStatus != null">
+				classify_status,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				#{id,jdbcType=INTEGER},
 			</if>
+			<if test="classifyLevel != null">
+				#{classifyLevel,jdbcType=INTEGER},
+			</if>
 			<if test="classifyName != null">
 				#{classifyName,jdbcType=VARCHAR},
+			</if>
+			<if test="classifyPath != null">
+				#{classifyPath,jdbcType=VARCHAR},
 			</if>
 			<if test="classifyParentId != null">
 				#{classifyParentId,jdbcType=INTEGER},
 			</if>
-			<if test="classifyDescription != null">
-				#{classifyDescription,jdbcType=VARCHAR},
-			</if>
 			<if test="classifyUserId != null">
 				#{classifyUserId,jdbcType=INTEGER},
+			</if>
+			<if test="classifyBlogNum != null">
+				#{classifyBlogNum,jdbcType=INTEGER},
+			</if>
+			<if test="classifyDescription != null">
+				#{classifyDescription,jdbcType=VARCHAR},
 			</if>
 			<if test="classifyCreateTime != null">
 				#{classifyCreateTime,jdbcType=TIMESTAMP},
@@ -88,40 +126,72 @@
 			<if test="classifyModifyTime != null">
 				#{classifyModifyTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="classifyStatus != null">
+				#{classifyStatus,jdbcType=INTEGER},
+			</if>
 		</trim>
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.blog.Classify">
 		update t_classify
 		<set>
+			<if test="classifyLevel != null">
+				classify_level = #{classifyLevel,jdbcType=INTEGER},
+			</if>
 			<if test="classifyName != null">
 				classify_name = #{classifyName,jdbcType=VARCHAR},
 			</if>
-			<if test="classifyParentId != null">
-				classify_parent_id = #{classifyParentId,jdbcType=INTEGER},
+			<if test="classifyPath != null">
+				classify_path = #{classifyPath,jdbcType=VARCHAR},
 			</if>
-			<if test="classifyDescription != null">
-				classify_description = #{classifyDescription,jdbcType=VARCHAR},
+			<if test="classifyParentId != null">
+				classify_parent_id =
+				#{classifyParentId,jdbcType=INTEGER},
 			</if>
 			<if test="classifyUserId != null">
 				classify_user_id = #{classifyUserId,jdbcType=INTEGER},
 			</if>
+			<if test="classifyBlogNum != null">
+				classify_blog_num = #{classifyBlogNum,jdbcType=INTEGER},
+			</if>
+			<if test="classifyDescription != null">
+				classify_description =
+				#{classifyDescription,jdbcType=VARCHAR},
+			</if>
 			<if test="classifyCreateTime != null">
-				classify_create_time = #{classifyCreateTime,jdbcType=TIMESTAMP},
+				classify_create_time =
+				#{classifyCreateTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="classifyModifyTime != null">
-				classify_modify_time = #{classifyModifyTime,jdbcType=TIMESTAMP},
+				classify_modify_time =
+				#{classifyModifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="classifyStatus != null">
+				classify_status = #{classifyStatus,jdbcType=INTEGER},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.blog.entity.blog.Classify">
 		update t_classify
-		set classify_name = #{classifyName,jdbcType=VARCHAR},
-		classify_parent_id = #{classifyParentId,jdbcType=INTEGER},
-		classify_description = #{classifyDescription,jdbcType=VARCHAR},
-		classify_user_id = #{classifyUserId,jdbcType=INTEGER},
-		classify_create_time = #{classifyCreateTime,jdbcType=TIMESTAMP},
-		classify_modify_time = #{classifyModifyTime,jdbcType=TIMESTAMP}
+		set classify_level = #{classifyLevel,jdbcType=INTEGER},
+		classify_name =
+		#{classifyName,jdbcType=VARCHAR},
+		classify_path =
+		#{classifyPath,jdbcType=VARCHAR},
+		classify_parent_id =
+		#{classifyParentId,jdbcType=INTEGER},
+		classify_user_id =
+		#{classifyUserId,jdbcType=INTEGER},
+		classify_blog_num =
+		#{classifyBlogNum,jdbcType=INTEGER},
+		classify_description =
+		#{classifyDescription,jdbcType=VARCHAR},
+		classify_create_time =
+		#{classifyCreateTime,jdbcType=TIMESTAMP},
+		classify_modify_time =
+		#{classifyModifyTime,jdbcType=TIMESTAMP},
+		classify_status =
+		#{classifyStatus,jdbcType=INTEGER}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<select id="selectAlls" parameterType="com.blog.entity.blog.Classify"
@@ -130,25 +200,48 @@
 		<include refid="Base_Column_List" />
 		from t_classify
 		<where>
+			<if test="classifyLevel != null">
+				and classify_level = #{classifyLevel,jdbcType=INTEGER}
+			</if>
 			<if test="classifyName != null">
 				and classify_name = #{classifyName,jdbcType=VARCHAR}
 			</if>
-			<if test="classifyParentId != null">
-				and classify_parent_id = #{classifyParentId,jdbcType=INTEGER}
+			<if test="classifyPath != null">
+				and classify_path = #{classifyPath,jdbcType=VARCHAR}
 			</if>
-			<if test="classifyDescription != null">
-				and classify_description = #{classifyDescription,jdbcType=VARCHAR}
+			<if test="classifyParentId != null">
+				and classify_parent_id =
+				#{classifyParentId,jdbcType=INTEGER}
 			</if>
 			<if test="classifyUserId != null">
 				and classify_user_id = #{classifyUserId,jdbcType=INTEGER}
 			</if>
+			<if test="classifyBlogNum != null">
+				and classify_blog_num =
+				#{classifyBlogNum,jdbcType=INTEGER}
+			</if>
+			<if test="classifyDescription != null">
+				and classify_description =
+				#{classifyDescription,jdbcType=VARCHAR}
+			</if>
 			<if test="classifyCreateTime != null">
-				and classify_create_time = #{classifyCreateTime,jdbcType=TIMESTAMP}
+				and classify_create_time =
+				#{classifyCreateTime,jdbcType=TIMESTAMP}
 			</if>
 			<if test="classifyModifyTime != null">
-				and classify_modify_time = #{classifyModifyTime,jdbcType=TIMESTAMP}
+				and classify_modify_time =
+				#{classifyModifyTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="classifyStatus != null">
+				and classify_status = #{classifyStatus,jdbcType=INTEGER}
 			</if>
 		</where>
 	</select>
-
+	<select id="selectByLikeClassifyPath" parameterType="com.blog.entity.blog.Classify"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_classify
+		where classify_user_id=#{1} and classify_path like #{0} '%'
+	</select>
 </mapper>

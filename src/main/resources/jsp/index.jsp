@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
-<%@include file="../common/basePath.jsp" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
+<%@include file="../common/basePath.jsp"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../common/css/bootstrap_css.jsp"%>
-<%@include file="../common/js/jquery_3.2.1.jsp"%>
+<%@include file="../common/js/jquery.jsp"%>
 <%@include file="../common/js/bootstrap_js.jsp"%>
 <title>模板</title>
 <style type="text/css">
@@ -33,7 +33,50 @@ header {
 	font-size: 18px;
 	color: #563d7c;
 }
+
+.pop {
+	background-image: -webkit-radial-gradient(center center, ellipse cover, rgba(0, 0, 0, 0.4)
+		0px, rgba(0, 0, 0, 0.5) 100%);
+	z-index: 99;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	opacity: 1;
+	/* display: none;  */
+}
+
+.pop .dialog {
+	z-index: 990;
+	width: 450px;
+	height: 80%;
+	margin-left: calc(100%/ 2 - 225px);
+	background: #fff;
+	position: absolute;
+	top: 10%;
+}
 </style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#loginBtn").click(function() {
+			alert($("input[name=userName]").val());
+			$.ajax({
+				url : 'login.json',
+				data : {
+					'userName' : $("input[name=userName]").val(),
+					'userPassword' : $("input[name=password]").val()
+				},
+				type:'post',
+				datatype:'json',
+				success:function(data){
+					alert(data)
+				}
+			});
+		});
+
+	})
+</script>
 </head>
 <body>
 	<header>
@@ -48,17 +91,24 @@ header {
 				<div
 					class="col-lg-9 col-md-9 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 ">
 					<div class="row">
-						<a href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">电脑</a>
-						<a href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">情感</a>
-						<a href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">技术</a>
-						<a href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">学习</a>
+						<a href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">电脑</a> <a
+							href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">情感</a> <a
+							href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">技术</a> <a
+							href="#" class="col-lg-2 col-md-2 col-sm-3 col-xs-3">学习</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</header>
 	<article class="container">
-		</script>
+		<shiro:hasRole name="admin">admin</shiro:hasRole>
+		<div class="pop">
+			<div class="dialog">
+				username:<input type="text" name="userName"> <br>
+				password:<input type="password" name="password">
+			</div>
+			<button id="loginBtn">登录</button>
+		</div>
 	</article>
 	<footer>脚</footer>
 </body>

@@ -2,34 +2,23 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../../common/basePath.jsp"%>
+<%@ include file="../../common/css/bootstrap_css.jsp"%>
+<%@ include file="../../common/js/bootstrap_js.jsp"%>
 <!DOCTYPE HTML>
 <html>
-
 <head>
 <meta charset="UTF-8">
-<title>write</title>
-<style type="text/css">
-body, .body {
-	background: #eee;
-	margin: 0px;
-}
-
-.container-fluid {
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
-	border-top: 1px solid #eee;
-	background: #fff;
-}
-</style>
+<title>创作</title>
+<link rel="stylesheet" type="text/css" href="${basePath }/res/css/inc.css" />
+<%@ include file="../../common/js/jquery.jsp"%>
 </head>
 <body>
 	<div class="body">
-		<%@include file="./header.jsp" %>
-		<div class="container-fluid">
-			<%@include file="./container-left.jsp"%>
-			<%@include file="./container-right.jsp"%>
+	<c:set var="submenu" value="writeMenu"></c:set>
+		<%@include file="../include/header.jsp" %>
+		<div class="content">
+			<%@include file="../include/left.jsp"%>
+			<%@include file="./ueditor-content.jsp"%>
 		</div>
 	</div>
 </body>

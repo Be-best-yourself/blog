@@ -57,9 +57,9 @@
 				<entry key="hour" value="3600"></entry>
 				<entry key="oneDay" value="86400"></entry>
 
-				<entry key="authorizationCache" value="1800"></entry>
-				<entry key="authenticationCache" value="1800"></entry>
-				<entry key="shiro-activeSessionCache" value="1800"></entry>
+				<entry key="authorizationCache" value="864000"></entry>
+				<entry key="authenticationCache" value="864000"></entry>
+				<entry key="shiro-activeSessionCache" value="864000"></entry>
 			</map>
 		</property>
 	</bean>

@@ -26,6 +26,14 @@ public class UserController extends BaseController {
 	@Autowired
 	private IUserService iUserService;
 
+	@RequestMapping("/isSessionTimeOut")
+	public ModelAndView isSessionTimeOut() {
+		ModelAndView mv = new ModelAndView();
+		Subject currenUser= SecurityUtils.getSubject();
+		mv.addObject("result", currenUser.getPrincipal() instanceof User);
+		return mv;
+	}
+	
 	// 转到用户注册
 	@RequestMapping("/user/toRegister")
 	public ModelAndView toRegister() {

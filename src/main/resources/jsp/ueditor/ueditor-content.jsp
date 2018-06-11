@@ -1,11 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!--为方便查找修改，将css文件碎片化-->
-<style>
-.container-right{
-	margin-left:165px;
-}
-</style>
 <div class="container-right">
 	<!-- 加载编辑器的容器 -->
 	<script id="editor" style="width: 100%; height: 100%" name="content"

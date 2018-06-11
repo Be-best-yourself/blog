@@ -9,9 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import com.blog.entity.SessionUser;
 
 /**
  * 基本Controller,放入logger
@@ -60,17 +57,6 @@ public class BaseController {
 	protected Object getSessionByAttributeName(HttpServletRequest request,String AttributeName) {
 		HttpSession httpSession=getSession(request);
 		return httpSession.getAttribute(AttributeName) == null ? null : httpSession.getAttribute(AttributeName);
-	}
-
-	/**
-	 * 获取SessionUser，加上ModelAttribute将SessionUser自动放入modelMap中
-	 * @param request
-	 * @return sessionUser
-	 */
-	@ModelAttribute("sessionUser")
-	protected SessionUser getSessionUser(HttpServletRequest request) {
-		SessionUser sessionUser = (SessionUser) getSession(request).getAttribute(SESSIONUSER);
-		return sessionUser != null ? sessionUser : null;
 	}
 
 	/**

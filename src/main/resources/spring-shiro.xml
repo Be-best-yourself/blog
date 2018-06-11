@@ -12,9 +12,23 @@
 				<ref bean="myRealm" />
 			</list>
 		</property>
-		<!-- <property name="rememberMeManager.cookie.maxAge" value="20"></property> -->
+		<property name="rememberMeManager" ref="rememberMeManager"></property>
 	</bean>
 
+	<!-- rememberMe管理器 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<property name="cipherKey"
+			value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+		<property name="cookie" ref="rememberMeCookie" />
+	</bean>
+	<!-- remCookie 设置 -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<!-- cookie的名字 -->
+		<constructor-arg value="rememberMe" />
+		<property name="httpOnly" value="true" />
+		<property name="maxAge" value="864000" />
+	</bean>
+	
 	<bean id="myRealm" class="com.blog.shiro.realms.ShiroRealm">
 		<!-- 为realm设置密码加密器 -->
 		<property name="credentialsMatcher">
@@ -27,18 +41,10 @@
 			</bean>
 		</property>
 	</bean>
-<!-- 	<bean id="secondRealm" class="com.blog.shiro.realms.SecondRealm">
-		为realm设置密码加密器
-		<property name="credentialsMatcher">
-			为credentialsMatcher加密器设置加密类型
-			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-				设置加密属性
-				<property name="hashAlgorithmName" value="SHA1" />
-				加密次数
-				<property name="hashIterations" value="1024" />
-			</bean>
-		</property>
-	</bean> -->
+	<!-- <bean id="secondRealm" class="com.blog.shiro.realms.SecondRealm"> 为realm设置密码加密器 
+		<property name="credentialsMatcher"> 为credentialsMatcher加密器设置加密类型 <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher"> 
+		设置加密属性 <property name="hashAlgorithmName" value="SHA1" /> 加密次数 <property 
+		name="hashIterations" value="1024" /> </bean> </property> </bean> -->
 	<!-- 多reaml验证策略 -->
 	<bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
 		<property name="authenticationStrategy">
@@ -61,26 +67,34 @@
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
 
+	<bean id="sessionListener" class="com.blog.shiro.SessionListener"></bean>
+
 	<!-- sesisonCookie 设置 -->
 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<!-- cookie的名字 -->
 		<constructor-arg value="sessionIdCookie" />
 		<property name="httpOnly" value="true" />
-		<!-- 30分钟 单位是秒 -->
-		<property name="maxAge" value="1800" />
+		<property name="maxAge" value="864000" />
 	</bean>
 	<!-- 会话DAO 用于会话的CRUD -->
 	<bean id="sessionDAO"
 		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-		<!-- Session缓存名字，配置30分钟过期 -->
+		<!-- Session缓存名字，配置10天过期 -->
 		<property name="activeSessionsCacheName" value="shiro-activeSessionCache" />
 		<property name="cacheManager" ref="shiroSpringCacheManager" />
 	</bean>
 	<!-- 会话管理器 -->
 	<bean id="sessionManager"
 		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-		<!-- 设置全局会话超时时间 半小时 单位是毫秒 -->
-		<property name="globalSessionTimeout" value="1800000" />
+		<!-- 设置全局会话超时时间10天 单位是毫秒 -->
+		<property name="globalSessionTimeout" value="864000" />
+		<property name="sessionListeners">
+			<list>
+				<ref bean="sessionListener" />
+			</list>
+		</property>
+		<!-- 定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话 -->
+		<!-- <property name="sessionValidationInterval" value="180000"/> -->
 		<!-- url上带sessionId 默认为true -->
 		<property name="sessionIdUrlRewritingEnabled" value="false" />
 		<property name="sessionIdCookie" ref="sessionIdCookie" />
