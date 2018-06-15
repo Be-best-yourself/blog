@@ -58,17 +58,18 @@ create table t_classify (
 -------------------
 create table t_blog (
   id int(11) not null auto_increment,
-  blog_author_id int(11) default null comment '博客作者id',
+  blog_user_id int(11) default null comment '博客创建用户id',
   blog_classify_id int(11) default null comment '博客分类id,引用分类表中的id,多个分类以逗号分隔',
   blog_name varchar(64) not null comment '博文名字',
   blog_keyword varchar(255) not null comment '博客关键字，写入html中keyword中，方便百度收录',
-  blog_title varchar(64) not null comment '博客名称',
+  blog_title varchar(64) not null comment '博客标题',
+  blog_status int(11) not null default '0' comment 'blog状态，默认0可用，1为不可用，即在回收站',
   blog_description varchar(255) not null comment '博客描述',
   blog_create_time datetime default null on update current_timestamp comment '博客创建时间',
   blog_modify_time datetime default null on update current_timestamp comment '博客修改时间',
   primary key (id),
   key blog_name_classify_id (blog_classify_id,blog_name) using hash comment '为博客名字和分类id创建hash索引，为以后博文多时，方便搜索'
-) engine=innodb default charset=utf8;
+) engine=innodb auto_increment=4 default charset=utf8;
 
 
 -------------------
