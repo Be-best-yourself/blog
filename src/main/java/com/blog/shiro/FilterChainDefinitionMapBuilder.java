@@ -9,6 +9,7 @@ public class FilterChainDefinitionMapBuilder {
 		LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<String,String>();
 		filterChainDefinitionMap.put("/user/*", "anon");
 		filterChainDefinitionMap.put("/editor/*", "authc");
+		filterChainDefinitionMap.put("/recycle/*", "authc");
 		filterChainDefinitionMap.put("/logout", "logout");
 		filterChainDefinitionMap.put("/**", "anon");
 		return filterChainDefinitionMap;

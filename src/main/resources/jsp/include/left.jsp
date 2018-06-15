@@ -27,5 +27,7 @@
 		<li <c:if test="${submenu eq 'classifyMenu'}">class="active"</c:if>><a
 			href="${basePath }editor/toClassify">分类管理</a></li>
 		<li><a href="#">草稿箱</a></li>
+		<li <c:if test="${submenu eq 'recycleMenu'}">class="active"</c:if>><a href="${basePath }recycle/toRecycle">回收站</a></li>
+		
 	</ul>
 </div>
