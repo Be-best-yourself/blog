@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.blog.entity.blog.Blog;
 import com.blog.entity.blog.Classify;
 import com.blog.entity.user.User;
 import com.blog.service.blog.IBlogService;
@@ -19,7 +20,7 @@ import com.blog.service.blog.IClassifyService;
 
 @Controller
 @RequestMapping("editor")
-public class UEditorController extends LoginController{
+public class UEditorController extends BaseController{
 
 	@Autowired
 	private IClassifyService iClassifyService;
@@ -50,6 +51,12 @@ public class UEditorController extends LoginController{
 		queryClassify.setClassifyStatus(0);
 		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
 		mv.addObject("classifys", classifys);
+		Blog queryBlog=new Blog();
+		queryBlog.setBlogClassifyId(0);
+		queryBlog.setBlogStatus(0);
+		queryBlog.setBlogUserId(user.getId());
+		List<Blog> blogs = iBlogService.getAlls(queryBlog);
+		mv.addObject("blogs", blogs);
 		return mv;
 	}
 	/*查询当前用户同一个父ID的目录*/
@@ -158,6 +165,29 @@ public class UEditorController extends LoginController{
 			iBlogService.updateBlogStautsByClassifyId(1, classify.getId());
 			updateClassifyAndBLogByClassifyParentId(classify.getId(),userId);
 		}
+	}
+	
+	
+	/*查询当前目录下所有子目录以前文章*/
+	@RequestMapping(value="getChildClassifyAndBlogById",method=RequestMethod.POST)
+	public ModelAndView getChildClassifyAndBlogById(int id){
+		Subject currenUser= SecurityUtils.getSubject();
+		User user= (User) currenUser.getPrincipal();
+		
+		ModelAndView mv = new ModelAndView("classify/folderAndBlog");
+		Classify queryClassify=new Classify();
+		queryClassify.setClassifyParentId(id);
+		queryClassify.setClassifyStatus(0);
+		queryClassify.setClassifyUserId(user.getId());
+		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
+		mv.addObject("classifys", classifys);
+		Blog queryBlog=new Blog();
+		queryBlog.setBlogClassifyId(id);
+		queryBlog.setBlogStatus(0);
+		queryBlog.setBlogUserId(user.getId());
+		List<Blog> blogs = iBlogService.getAlls(queryBlog);
+		mv.addObject("blogs", blogs);
+		return mv;
 	}
 	
 }
