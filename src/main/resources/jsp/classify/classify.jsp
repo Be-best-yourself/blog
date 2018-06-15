@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../common/basePath.jsp"%>
 <!DOCTYPE>
 <html>
@@ -9,8 +10,6 @@
 <title>分类管理</title>
 <link rel="stylesheet" type="text/css"
 	href="${basePath }/res/css/inc.css" />
-<link rel="stylesheet" type="text/css"
-	href="${basePath }/res/css/pop.css" />
 <%@ include file="../../common/js/jquery.jsp"%>
 <%@ include file="../../common/css/bootstrap_css.jsp"%>
 <%@ include file="../../common/js/bootstrap_js.jsp"%>
@@ -47,7 +46,7 @@
 /*目录详情区 */
 .classify-dtl {
 	width: 66%;
-	min-height: 934px;
+	min-height: 500px;
 	float: left;
 	border: 1px solid #eee;
 	margin-left: 2%;
@@ -61,6 +60,23 @@
 	border-radius: 3px;
 	border-bottom: 1px solid;
 	display: none;
+}
+
+/*目录文章显示区*/
+.dtl{
+	padding-left: 15px;
+    font-family: cursive;
+}
+.dtl>table{
+    line-height: 2em;
+    width: 100%;
+}
+.dtl>table>tbody>tr{
+	cursor:pointer;
+	color: #337ab7;
+}
+.dtl>table>tbody>tr:hover {
+	background: #f0f8ff;
 }
 </style>
 <script type="text/javascript">
@@ -97,7 +113,12 @@ function classifyFold(id) {
 		$("#" + id).find("div:gt(0)").remove();
 		aText.text("+");
 	}
-	/*目录详情区显示*/
+	classifyTitle(id);
+	classifyDtl(id);
+}
+
+/*目录title显示*/
+function classifyTitle(id){
 	$.ajax({
 		url : '${basePath }editor/classify/getParent.json',
 		data : {
@@ -117,6 +138,22 @@ function classifyFold(id) {
 		}
 	});
 }
+
+/* 目录详情区显示 */
+function classifyDtl(id){
+	$.ajax({
+		url : '${basePath }editor/getChildClassifyAndBlogById',
+		data : {'id':id},
+		type : 'post',
+		dataType : 'html',
+		success : function(data) {
+			$(".dtl").empty();
+			$(".dtl").append(data);
+		}
+	});
+}
+
+
 /* 新建分类 */
 function createClassify(classifyName, classifyParentId) {
 	$.ajax({
@@ -244,7 +281,6 @@ $(document).ready(function() {
 			renameClassify(createClassifyName,classifyId);
 			return;
 		}
-
 	});
 	$("#cancel").on("click",function() {
 		$(".createInput").hide();
@@ -263,7 +299,9 @@ $(document).ready(function() {
 <body>
 	<div class="body">
 		<c:set var="submenu" value="classifyMenu"></c:set>
+
 		<%@include file="../include/header.jsp"%>
+
 		<div class="content">
 			<%@include file="../include/left.jsp"%>
 
@@ -285,6 +323,7 @@ $(document).ready(function() {
 
 				<!-- 目录详情区 -->
 				<div class="classify-dtl">
+					<!-- 目录title -->
 					<div class="title">
 						<div id="classifyLocation" style="float:left">
 							当前位置:<span>/</span><input class="createInput" type="text" /> 
@@ -307,11 +346,44 @@ $(document).ready(function() {
 								href="javascript:void(0)" id="cancel">取消</a></span>
 						</div>
 					</div>
+					<div class="clear"></div>
+					<!-- 目录详情 -->
+					<div class="dtl">
+						<table>
+							<thead>
+								<tr>
+									<td  style="width: 50%">名称</td>
+									<td  style="width: 30%">类形</td>
+									<td  style="width: 20%">创建时间</td>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${classifys }" var="classify">
+									<tr onclick="classifyFold('${classify.id}')">
+										<td>${classify.classifyName }</td>
+										<td>文件夹</td>
+										<td><fmt:formatDate value="${classify.classifyCreateTime }" type="date"
+												pattern="yyyy-MM-dd HH:mm" /></td>
+									</tr>
+								</c:forEach>
+								<c:forEach items="${blogs }" var="blog">
+									<tr onclick="javascript:void(0)">
+										<td>${blog.blogName }</td>
+										<td>文章</td>
+										<td><fmt:formatDate value="${blog.blogCreateTime }"
+												type="date" pattern="yyyy-MM-dd HH:mm" /></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 
 		</div>
+
 	</div>
+	<%@include file="../../common/loading.jsp" %>
 
 </body>
 </html>
