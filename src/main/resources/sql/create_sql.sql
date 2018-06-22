@@ -117,3 +117,19 @@ create table t_user_role (
   key user_role_userid_and_roleid (user_id,role_id) using hash comment '为用户角色关联表创建hash索引'
 ) engine=innodb default charset=utf8;
 
+------------------
+-----上传文件 表------
+------------------
+create table t_upload_file (
+  id int(11) not null auto_increment,
+  upload_user_id int(11) not null default '0' comment '文件上传的id',
+  upload_original_name varchar(255) default null comment '上传的原始名',
+  upload_size bigint(20) not null default '0' comment '文件size',
+  upload_title_name varchar(64) default null comment '上传的名字',
+  upload_type varchar(32) default null comment '文件类型',
+  file_type int(11) not null default '0' comment '文件类型，默认0图片，1视频，2文件',
+  upload_url varchar(64) not null comment '上传的url',
+  upload_create_time datetime not null on update current_timestamp comment '创建时间',
+  primary key (id)
+) engine=innodb auto_increment=63 default charset=utf8;
+

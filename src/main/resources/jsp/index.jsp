@@ -44,7 +44,7 @@ header {
 	right: 0;
 	position: fixed;
 	opacity: 1;
-	/* display: none;  */
+	display: none;  
 }
 
 .pop .dialog {
@@ -74,6 +74,10 @@ header {
 				}
 			});
 		});
+		$("#btn").on("click",function(){
+			alert($("#file").val());
+		});
+		
 
 	})
 </script>
@@ -102,6 +106,13 @@ header {
 	</header>
 	<article class="container">
 		<shiro:hasRole name="admin">admin</shiro:hasRole>
+		
+		<form action="${basePath }upload/file" method="post" enctype="multipart/form-data">
+		<input id="file" type="file" name="uploadFile" multiple="multiple"/>
+		<input id="btn" type="text" value="上传">
+		</form>
+		
+		
 		<div class="pop">
 			<div class="dialog">
 				username:<input type="text" name="userName"> <br>
