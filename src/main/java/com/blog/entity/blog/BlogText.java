@@ -6,8 +6,6 @@ import java.util.Arrays;
 public class BlogText implements Serializable {
     private Integer id;
 
-    private Integer blogId;
-
     private byte[] blogText;
 
     private static final long serialVersionUID = 1L;
@@ -18,14 +16,6 @@ public class BlogText implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getBlogId() {
-        return blogId;
-    }
-
-    public void setBlogId(Integer blogId) {
-        this.blogId = blogId;
     }
 
     public byte[] getBlogText() {
@@ -49,7 +39,6 @@ public class BlogText implements Serializable {
         }
         BlogText other = (BlogText) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getBlogId() == null ? other.getBlogId() == null : this.getBlogId().equals(other.getBlogId()))
             && (Arrays.equals(this.getBlogText(), other.getBlogText()));
     }
 
@@ -58,7 +47,6 @@ public class BlogText implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getBlogId() == null) ? 0 : getBlogId().hashCode());
         result = prime * result + (Arrays.hashCode(getBlogText()));
         return result;
     }
@@ -70,7 +58,6 @@ public class BlogText implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", blogId=").append(blogId);
         sb.append(", blogText=").append(blogText);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

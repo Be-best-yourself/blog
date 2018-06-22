@@ -17,4 +17,22 @@ public class BlogServiceImpl extends BaseServiceImpl<Blog> implements IBlogServi
 	public void updateBlogStautsByClassifyId(int blogStatus, int classifyId) {
 		iBlogDao.updateBlogStautsByClassifyId(blogStatus,classifyId);
 	}
+
+	@Override
+	public int updateOrAdd(Blog blog) {
+		int key;
+		if (blog.getId()!=null) {
+			key = iBlogDao.updateByPrimaryKey(blog);
+		}else{
+			key=iBlogDao.insert(blog);
+		}
+		return key;
+	}
+
+	@Override
+	public Blog selectByIdAndUserId(int id, int userId) {
+		return iBlogDao.selectByIdAndUserId(id,userId);
+	}
+	
+	
 }

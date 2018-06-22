@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.blog.IUploadFileDao">
+	<resultMap id="BaseResultMap" type="com.blog.entity.blog.UploadFile">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="upload_user_id" jdbcType="INTEGER" property="uploadUserId" />
+		<result column="upload_original_name" jdbcType="VARCHAR"
+			property="uploadOriginalName" />
+		<result column="upload_size" jdbcType="BIGINT" property="uploadSize" />
+		<result column="upload_title_name" jdbcType="VARCHAR" property="uploadTitleName" />
+		<result column="upload_type" jdbcType="VARCHAR" property="uploadType" />
+		<result column="file_type" jdbcType="INTEGER" property="fileType" />
+		<result column="upload_url" jdbcType="VARCHAR" property="uploadUrl" />
+		<result column="upload_create_time" jdbcType="TIMESTAMP"
+			property="uploadCreateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, upload_user_id, upload_original_name, upload_size, upload_title_name,
+		upload_type,
+		file_type, upload_url, upload_create_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_upload_file
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_upload_file
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.blog.entity.blog.UploadFile">
+		insert into t_upload_file (id, upload_user_id, upload_original_name,
+		upload_size, upload_title_name, upload_type,
+		file_type, upload_url, upload_create_time
+		)
+		values (#{id,jdbcType=INTEGER}, #{uploadUserId,jdbcType=INTEGER},
+		#{uploadOriginalName,jdbcType=VARCHAR},
+		#{uploadSize,jdbcType=BIGINT}, #{uploadTitleName,jdbcType=VARCHAR}, #{uploadType,jdbcType=VARCHAR},
+		#{fileType,jdbcType=INTEGER}, #{uploadUrl,jdbcType=VARCHAR},
+		#{uploadCreateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.blog.entity.blog.UploadFile">
+		insert into t_upload_file
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uploadUserId != null">
+				upload_user_id,
+			</if>
+			<if test="uploadOriginalName != null">
+				upload_original_name,
+			</if>
+			<if test="uploadSize != null">
+				upload_size,
+			</if>
+			<if test="uploadTitleName != null">
+				upload_title_name,
+			</if>
+			<if test="uploadType != null">
+				upload_type,
+			</if>
+			<if test="fileType != null">
+				file_type,
+			</if>
+			<if test="uploadUrl != null">
+				upload_url,
+			</if>
+			<if test="uploadCreateTime != null">
+				upload_create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uploadUserId != null">
+				#{uploadUserId,jdbcType=INTEGER},
+			</if>
+			<if test="uploadOriginalName != null">
+				#{uploadOriginalName,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadSize != null">
+				#{uploadSize,jdbcType=BIGINT},
+			</if>
+			<if test="uploadTitleName != null">
+				#{uploadTitleName,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadType != null">
+				#{uploadType,jdbcType=VARCHAR},
+			</if>
+			<if test="fileType != null">
+				#{fileType,jdbcType=INTEGER},
+			</if>
+			<if test="uploadUrl != null">
+				#{uploadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadCreateTime != null">
+				#{uploadCreateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.blog.UploadFile">
+		update t_upload_file
+		<set>
+			<if test="uploadUserId != null">
+				upload_user_id = #{uploadUserId,jdbcType=INTEGER},
+			</if>
+			<if test="uploadOriginalName != null">
+				upload_original_name = #{uploadOriginalName,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadSize != null">
+				upload_size = #{uploadSize,jdbcType=BIGINT},
+			</if>
+			<if test="uploadTitleName != null">
+				upload_title_name = #{uploadTitleName,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadType != null">
+				upload_type = #{uploadType,jdbcType=VARCHAR},
+			</if>
+			<if test="fileType != null">
+				file_type = #{fileType,jdbcType=INTEGER},
+			</if>
+			<if test="uploadUrl != null">
+				upload_url = #{uploadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="uploadCreateTime != null">
+				upload_create_time = #{uploadCreateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.blog.entity.blog.UploadFile">
+		update t_upload_file
+		set upload_user_id = #{uploadUserId,jdbcType=INTEGER},
+		upload_original_name = #{uploadOriginalName,jdbcType=VARCHAR},
+		upload_size = #{uploadSize,jdbcType=BIGINT},
+		upload_title_name = #{uploadTitleName,jdbcType=VARCHAR},
+		upload_type = #{uploadType,jdbcType=VARCHAR},
+		file_type = #{fileType,jdbcType=INTEGER},
+		upload_url = #{uploadUrl,jdbcType=VARCHAR},
+		upload_create_time = #{uploadCreateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectAlls" parameterType="com.blog.entity.blog.UploadFile"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_upload_file
+		<where>
+			<if test="uploadUserId != null">
+				and upload_user_id = #{uploadUserId,jdbcType=INTEGER}
+			</if>
+			<if test="uploadOriginalName != null">
+				and upload_original_name =
+				#{uploadOriginalName,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadSize != null">
+				and upload_size = #{uploadSize,jdbcType=BIGINT}
+			</if>
+			<if test="uploadTitleName != null">
+				and upload_title_name =
+				#{uploadTitleName,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadType != null">
+				and upload_type = #{uploadType,jdbcType=VARCHAR}
+			</if>
+			<if test="fileType != null">
+				and file_type = #{fileType,jdbcType=INTEGER}
+			</if>
+			<if test="uploadUrl != null">
+				and upload_url = #{uploadUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="uploadCreateTime != null">
+				and upload_create_time =
+				#{uploadCreateTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>

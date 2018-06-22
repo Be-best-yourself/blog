@@ -8,6 +8,8 @@ public class Blog implements Serializable {
 
     private Integer blogUserId;
 
+    private Integer blogTextId;
+
     private Integer blogClassifyId;
 
     private String blogName;
@@ -40,6 +42,14 @@ public class Blog implements Serializable {
 
     public void setBlogUserId(Integer blogUserId) {
         this.blogUserId = blogUserId;
+    }
+
+    public Integer getBlogTextId() {
+        return blogTextId;
+    }
+
+    public void setBlogTextId(Integer blogTextId) {
+        this.blogTextId = blogTextId;
     }
 
     public Integer getBlogClassifyId() {
@@ -120,6 +130,7 @@ public class Blog implements Serializable {
         Blog other = (Blog) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getBlogUserId() == null ? other.getBlogUserId() == null : this.getBlogUserId().equals(other.getBlogUserId()))
+            && (this.getBlogTextId() == null ? other.getBlogTextId() == null : this.getBlogTextId().equals(other.getBlogTextId()))
             && (this.getBlogClassifyId() == null ? other.getBlogClassifyId() == null : this.getBlogClassifyId().equals(other.getBlogClassifyId()))
             && (this.getBlogName() == null ? other.getBlogName() == null : this.getBlogName().equals(other.getBlogName()))
             && (this.getBlogKeyword() == null ? other.getBlogKeyword() == null : this.getBlogKeyword().equals(other.getBlogKeyword()))
@@ -136,6 +147,7 @@ public class Blog implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getBlogUserId() == null) ? 0 : getBlogUserId().hashCode());
+        result = prime * result + ((getBlogTextId() == null) ? 0 : getBlogTextId().hashCode());
         result = prime * result + ((getBlogClassifyId() == null) ? 0 : getBlogClassifyId().hashCode());
         result = prime * result + ((getBlogName() == null) ? 0 : getBlogName().hashCode());
         result = prime * result + ((getBlogKeyword() == null) ? 0 : getBlogKeyword().hashCode());
@@ -155,6 +167,7 @@ public class Blog implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", blogUserId=").append(blogUserId);
+        sb.append(", blogTextId=").append(blogTextId);
         sb.append(", blogClassifyId=").append(blogClassifyId);
         sb.append(", blogName=").append(blogName);
         sb.append(", blogKeyword=").append(blogKeyword);

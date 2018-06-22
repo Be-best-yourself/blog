@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.sys.IDictItemDao">
+  <resultMap id="BaseResultMap" type="com.blog.entity.sys.DictItem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="item_dict_id" jdbcType="INTEGER" property="itemDictId" />
+    <result column="item_status" jdbcType="INTEGER" property="itemStatus" />
+    <result column="item_level" jdbcType="INTEGER" property="itemLevel" />
+    <result column="item_parent_id" jdbcType="INTEGER" property="itemParentId" />
+    <result column="item_create_user_id" jdbcType="INTEGER" property="itemCreateUserId" />
+    <result column="item_create_time" jdbcType="TIMESTAMP" property="itemCreateTime" />
+    <result column="item_modify_time" jdbcType="TIMESTAMP" property="itemModifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, item_name, item_code, item_dict_id, item_status, item_level, item_parent_id, 
+    item_create_user_id, item_create_time, item_modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_dict_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_dict_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blog.entity.sys.DictItem">
+    insert into sys_dict_item (id, item_name, item_code, 
+      item_dict_id, item_status, item_level, 
+      item_parent_id, item_create_user_id, item_create_time, 
+      item_modify_time)
+    values (#{id,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{itemDictId,jdbcType=INTEGER}, #{itemStatus,jdbcType=INTEGER}, #{itemLevel,jdbcType=INTEGER}, 
+      #{itemParentId,jdbcType=INTEGER}, #{itemCreateUserId,jdbcType=INTEGER}, #{itemCreateTime,jdbcType=TIMESTAMP}, 
+      #{itemModifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blog.entity.sys.DictItem">
+    insert into sys_dict_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="itemDictId != null">
+        item_dict_id,
+      </if>
+      <if test="itemStatus != null">
+        item_status,
+      </if>
+      <if test="itemLevel != null">
+        item_level,
+      </if>
+      <if test="itemParentId != null">
+        item_parent_id,
+      </if>
+      <if test="itemCreateUserId != null">
+        item_create_user_id,
+      </if>
+      <if test="itemCreateTime != null">
+        item_create_time,
+      </if>
+      <if test="itemModifyTime != null">
+        item_modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemDictId != null">
+        #{itemDictId,jdbcType=INTEGER},
+      </if>
+      <if test="itemStatus != null">
+        #{itemStatus,jdbcType=INTEGER},
+      </if>
+      <if test="itemLevel != null">
+        #{itemLevel,jdbcType=INTEGER},
+      </if>
+      <if test="itemParentId != null">
+        #{itemParentId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCreateUserId != null">
+        #{itemCreateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCreateTime != null">
+        #{itemCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemModifyTime != null">
+        #{itemModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.sys.DictItem">
+    update sys_dict_item
+    <set>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemDictId != null">
+        item_dict_id = #{itemDictId,jdbcType=INTEGER},
+      </if>
+      <if test="itemStatus != null">
+        item_status = #{itemStatus,jdbcType=INTEGER},
+      </if>
+      <if test="itemLevel != null">
+        item_level = #{itemLevel,jdbcType=INTEGER},
+      </if>
+      <if test="itemParentId != null">
+        item_parent_id = #{itemParentId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCreateUserId != null">
+        item_create_user_id = #{itemCreateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCreateTime != null">
+        item_create_time = #{itemCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemModifyTime != null">
+        item_modify_time = #{itemModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blog.entity.sys.DictItem">
+    update sys_dict_item
+    set item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_dict_id = #{itemDictId,jdbcType=INTEGER},
+      item_status = #{itemStatus,jdbcType=INTEGER},
+      item_level = #{itemLevel,jdbcType=INTEGER},
+      item_parent_id = #{itemParentId,jdbcType=INTEGER},
+      item_create_user_id = #{itemCreateUserId,jdbcType=INTEGER},
+      item_create_time = #{itemCreateTime,jdbcType=TIMESTAMP},
+      item_modify_time = #{itemModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

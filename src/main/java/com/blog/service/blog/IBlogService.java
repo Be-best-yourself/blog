@@ -6,4 +6,8 @@ import com.blog.service.IBaseService;
 public interface IBlogService extends IBaseService<Blog>{
 
 	void updateBlogStautsByClassifyId(int blogStatus, int classifyId);
+	
+	int updateOrAdd(Blog blog);
+	
+	Blog selectByIdAndUserId(int id,int userId);
 }
