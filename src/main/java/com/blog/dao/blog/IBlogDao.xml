@@ -4,6 +4,7 @@
 	<resultMap id="BaseResultMap" type="com.blog.entity.blog.Blog">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="blog_user_id" jdbcType="INTEGER" property="blogUserId" />
+		<result column="blog_text_id" jdbcType="INTEGER" property="blogTextId" />
 		<result column="blog_classify_id" jdbcType="INTEGER" property="blogClassifyId" />
 		<result column="blog_name" jdbcType="VARCHAR" property="blogName" />
 		<result column="blog_keyword" jdbcType="VARCHAR" property="blogKeyword" />
@@ -16,9 +17,9 @@
 			property="blogModifyTime" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, blog_user_id, blog_classify_id, blog_name, blog_keyword, blog_title,
-		blog_status,
-		blog_description, blog_create_time, blog_modify_time
+		id, blog_user_id, blog_text_id, blog_classify_id, blog_name,
+		blog_keyword, blog_title,
+		blog_status, blog_description, blog_create_time, blog_modify_time
 	</sql>
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
 		resultMap="BaseResultMap">
@@ -32,14 +33,15 @@
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert" parameterType="com.blog.entity.blog.Blog">
-		insert into t_blog (id, blog_user_id, blog_classify_id,
-		blog_name, blog_keyword, blog_title,
-		blog_status, blog_description, blog_create_time,
-		blog_modify_time)
+		insert into t_blog (id, blog_user_id, blog_text_id,
+		blog_classify_id, blog_name, blog_keyword,
+		blog_title, blog_status, blog_description,
+		blog_create_time, blog_modify_time)
 		values (#{id,jdbcType=INTEGER}, #{blogUserId,jdbcType=INTEGER},
-		#{blogClassifyId,jdbcType=INTEGER},
-		#{blogName,jdbcType=VARCHAR}, #{blogKeyword,jdbcType=VARCHAR}, #{blogTitle,jdbcType=VARCHAR},
-		#{blogStatus,jdbcType=INTEGER}, #{blogDescription,jdbcType=VARCHAR},
+		#{blogTextId,jdbcType=INTEGER},
+		#{blogClassifyId,jdbcType=INTEGER}, #{blogName,jdbcType=VARCHAR}, #{blogKeyword,jdbcType=VARCHAR},
+		#{blogTitle,jdbcType=VARCHAR}, #{blogStatus,jdbcType=INTEGER},
+		#{blogDescription,jdbcType=VARCHAR},
 		#{blogCreateTime,jdbcType=TIMESTAMP},
 		#{blogModifyTime,jdbcType=TIMESTAMP})
 	</insert>
@@ -51,6 +53,9 @@
 			</if>
 			<if test="blogUserId != null">
 				blog_user_id,
+			</if>
+			<if test="blogTextId != null">
+				blog_text_id,
 			</if>
 			<if test="blogClassifyId != null">
 				blog_classify_id,
@@ -84,6 +89,9 @@
 			<if test="blogUserId != null">
 				#{blogUserId,jdbcType=INTEGER},
 			</if>
+			<if test="blogTextId != null">
+				#{blogTextId,jdbcType=INTEGER},
+			</if>
 			<if test="blogClassifyId != null">
 				#{blogClassifyId,jdbcType=INTEGER},
 			</if>
@@ -116,6 +124,9 @@
 			<if test="blogUserId != null">
 				blog_user_id = #{blogUserId,jdbcType=INTEGER},
 			</if>
+			<if test="blogTextId != null">
+				blog_text_id = #{blogTextId,jdbcType=INTEGER},
+			</if>
 			<if test="blogClassifyId != null">
 				blog_classify_id = #{blogClassifyId,jdbcType=INTEGER},
 			</if>
@@ -146,6 +157,7 @@
 	<update id="updateByPrimaryKey" parameterType="com.blog.entity.blog.Blog">
 		update t_blog
 		set blog_user_id = #{blogUserId,jdbcType=INTEGER},
+		blog_text_id = #{blogTextId,jdbcType=INTEGER},
 		blog_classify_id = #{blogClassifyId,jdbcType=INTEGER},
 		blog_name = #{blogName,jdbcType=VARCHAR},
 		blog_keyword = #{blogKeyword,jdbcType=VARCHAR},
@@ -156,6 +168,15 @@
 		blog_modify_time = #{blogModifyTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
+	
+	<select id="selectByIdAndUserId" parameterType="com.blog.entity.blog.Blog"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_blog where id=#{0} and blog_user_id=#{1}
+	
+	</select>
+	
 	<select id="selectAlls" parameterType="com.blog.entity.blog.Blog"
 		resultMap="BaseResultMap">
 		select
@@ -164,6 +185,9 @@
 		<where>
 			<if test="blogUserId != null">
 				and blog_user_id = #{blogUserId,jdbcType=INTEGER}
+			</if>
+			<if test="blogTextId != null">
+				and blog_text_id = #{blogTextId,jdbcType=INTEGER}
 			</if>
 			<if test="blogClassifyId != null">
 				and blog_classify_id = #{blogClassifyId,jdbcType=INTEGER}
@@ -181,18 +205,21 @@
 				and blog_status = #{blogStatus,jdbcType=INTEGER}
 			</if>
 			<if test="blogDescription != null">
-				and blog_description = #{blogDescription,jdbcType=VARCHAR}
+				and blog_description =
+				#{blogDescription,jdbcType=VARCHAR}
 			</if>
 			<if test="blogCreateTime != null">
-				and blog_create_time = #{blogCreateTime,jdbcType=TIMESTAMP}
+				and blog_create_time =
+				#{blogCreateTime,jdbcType=TIMESTAMP}
 			</if>
 			<if test="blogModifyTime != null">
-				and blog_modify_time = #{blogModifyTime,jdbcType=TIMESTAMP}
+				and blog_modify_time =
+				#{blogModifyTime,jdbcType=TIMESTAMP}
 			</if>
 		</where>
 	</select>
 	<update id="updateBlogStautsByClassifyId">
-		update t_blog set blog_status=#{0} where blog_classify_id=#{1}
+		update t_blog set blog_status=#{0} where
+		blog_classify_id=#{1}
 	</update>
-	
 </mapper>
