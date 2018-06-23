@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../common/basePath.jsp"%>
 <!DOCTYPE>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>回收站</title>
+<title>草稿箱</title>
 <link rel="stylesheet" type="text/css"
 	href="${basePath }/res/css/inc.css" />
 <%@ include file="../../common/js/jquery.jsp"%>
@@ -92,9 +93,23 @@
 }
 </style>
 <script type="text/javascript">
-	function getChildRecycle() {
+	function editerBlog(id) {
+		window.location.href = '${basePath}editor/toUEditor?id=' + id;
+	}
+	function recycleBlog(id) {
 		$.ajax({
-			url : "${basePath}recycle/getChildRecycle",
+			url : "${basePath}blog/recycle/" + id + ".json",
+			data : null,
+			type : 'post',
+			dataType : 'json',
+			success : function(data) {
+				getChildClassify();
+			}
+		});
+	}
+	function getChildClassify() {
+		$.ajax({
+			url : "${basePath}drafts/getChildDrafts",
 			data : null,
 			type : 'post',
 			dataType : 'html',
@@ -104,50 +119,37 @@
 			}
 		});
 	}
-	function deleteBlog(id){
+	
+	function releaseBlog() {
+		if ($('#blogClassifyId').val() == ""||$('#blogClassifyId').val() ==null) {
+			$('#blogClassifyId').focus();
+			return;
+		}
 		$.ajax({
-			url : '${basePath}blog/' + id+ '.json',
-			data :null,
-			type : 'delete',
+			url : "${basePath}drafts/release.json",
+			data : {
+				'id' : $("#blogId").val(),
+				'blogName' : $("#blogName").val(),
+				'blogKeyword' : $("#blogKeyword").val(),
+				'blogClassifyId' : $("#blogClassifyId").val()
+			},
+			type : 'post',
 			dataType : 'json',
 			success : function(data) {
 				window.location.reload();
 			}
 		});
 	}
-	$(document).ready(function() {
-		getChildRecycle();
-		$("#releaseBtn,#saveBtn").on("click", function() {
-			if ($('#blogClassifyId').val() == ""||$('#blogClassifyId').val() ==null) {
-				$('#blogClassifyId').focus();
-				return;
-			}
-			var blogStatus = 0;
-			if ($(this).attr("id") == "saveBtn") {
-				blogStatus = 2;
-			}
-			$.ajax({
-				url : '${basePath}blog/' + $("#blogId").val() + '.json',
-				data : {
-					'blogName' : $('#blogName').val(),
-					'blogClassifyId' : $("#blogClassifyId").val(),
-					'blogStatus' : blogStatus,
-					'blogKeyword' : $("#blogKeyword").val()
-				},
-				type : 'post',
-				dataType : 'json',
-				success : function(data) {
-					window.location.reload();
-				}
-			});
 
-		});
+	$(document).ready(function() {
+		getChildClassify();
 	});
 </script>
 </head>
 <body>
+	<%@include file="../../common/loading.jsp"%>
 	<div class="body">
-		<c:set var="submenu" value="recycleMenu"></c:set>
+		<c:set var="submenu" value="draftsMenu"></c:set>
 		<%@include file="../include/header.jsp"%>
 		<div class="content">
 			<%@include file="../include/left.jsp"%>
@@ -156,6 +158,7 @@
 			</div>
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		function popClose() {
 			$(".pop").hide();
@@ -207,8 +210,8 @@
 				</form>
 			</div>
 			<div class="dialogFooter">
-				<button type="button" id="saveBtn" class="btn btn-lg">移至草稿</button>
-				<button type="button" id="releaseBtn" class="btn btn-primary btn-lg">直接发布</button>
+				<button type="button" onclick="releaseBlog()"
+					class="btn btn-primary btn-lg">确认发布</button>
 			</div>
 		</div>
 	</div>

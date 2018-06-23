@@ -10,6 +10,7 @@ public class FilterChainDefinitionMapBuilder {
 		filterChainDefinitionMap.put("/user/*", "anon");
 		filterChainDefinitionMap.put("/editor/*", "authc");
 		filterChainDefinitionMap.put("/classify/*", "authc");
+		filterChainDefinitionMap.put("/drafts/*", "authc");
 		filterChainDefinitionMap.put("/recycle/*", "authc");
 		filterChainDefinitionMap.put("/logout", "logout");
 		filterChainDefinitionMap.put("/**", "anon");

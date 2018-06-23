@@ -103,7 +103,7 @@
 				$('#blogName').focus();
 				return;
 			}
-			if ($('#blogClassifyId').val() == "") {
+			if ($('#blogClassifyId').val() == ""||$('#blogClassifyId').val() ==null) {
 				$('#blogClassifyId').focus();
 				return;
 			}
@@ -119,7 +119,7 @@
 						'blogText':UE.getEditor('editor').getContent(),
 						'blogClassifyId':$("#blogClassifyId").val(),
 						'blogStatus':blogStatus,
-						'blogKeyWord':$("#blogKeyWord").val()
+						'blogKeyword':$("#blogKeyword").val()
 						},
 				type : 'post',
 				dataType : 'json',
@@ -185,7 +185,7 @@
 			<form id="saveForm">
 				<input type="text" id="blogId" value="${blog.id }" style="display: none">
 				<input type="text" id="blogName" placeholder="请输入标题" value="${blog.blogName }" name="blogName"><span id="blogNameTip" style="color:red;margin-left:10px">*标题不能为空</span> 
-				<input type="text" id="blogKeyWord" placeholder="文章标签" value="${blog.blogKeyword }" name="blogKeyWord"><span id="blogKeyWordTip" style="color:red;margin-left:10px">建议输入文章标签</span> 
+				<input type="text" id="blogKeyword" placeholder="文章标签" value="${blog.blogKeyword }" name="blogKeyword"><span id="blogKeyWordTip" style="color:red;margin-left:10px">建议输入文章标签</span> 
 				<div style="width: 300px;margin-top:10px">
 					<select id="blogClassifyId" class="js-example-placeholder-single js-states form-control">
 						<option></option>

@@ -17,6 +17,7 @@ import com.blog.entity.blog.Classify;
 import com.blog.entity.user.User;
 import com.blog.service.blog.IBlogService;
 import com.blog.service.blog.IClassifyService;
+import com.blog.status.Status;
 
 @Controller
 public class ClassifyController extends BaseController{
@@ -37,12 +38,12 @@ public class ClassifyController extends BaseController{
 		Classify queryClassify=new Classify();
 		queryClassify.setClassifyUserId(user.getId());
 		queryClassify.setClassifyParentId(0);
-		queryClassify.setClassifyStatus(0);
+		queryClassify.setClassifyStatus(Status.CLASSIFY_ENABLED.CODE);
 		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
 		mv.addObject("classifys", classifys);
 		Blog queryBlog=new Blog();
 		queryBlog.setBlogClassifyId(0);
-		queryBlog.setBlogStatus(0);
+		queryBlog.setBlogStatus(Status.BLOG_ENABLED.CODE);
 		queryBlog.setBlogUserId(user.getId());
 		List<Blog> blogs = iBlogService.getAlls(queryBlog);
 		mv.addObject("blogs", blogs);
@@ -58,7 +59,7 @@ public class ClassifyController extends BaseController{
 		Classify queryClassify=new Classify();
 		queryClassify.setClassifyUserId(user.getId());
 		queryClassify.setClassifyParentId(id);
-		queryClassify.setClassifyStatus(0);
+		queryClassify.setClassifyStatus(Status.CLASSIFY_ENABLED.CODE);
 		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
 		mv.addObject("classifys", classifys);
 		return mv;
@@ -85,7 +86,7 @@ public class ClassifyController extends BaseController{
 		classify.setClassifyName(classifyName);
 		classify.setClassifyBlogNum(0);
 		classify.setClassifyCreateTime(new Date());
-		classify.setClassifyStatus(0);
+		classify.setClassifyStatus(Status.CLASSIFY_ENABLED.CODE);
 		if (parentClassify==null) {
 			classify.setClassifyLevel(1);
 			classify.setClassifyParentId(0);
@@ -131,11 +132,11 @@ public class ClassifyController extends BaseController{
 		Subject currenUser= SecurityUtils.getSubject();
 		User user= (User) currenUser.getPrincipal();
 		Classify updateClassify=iClassifyService.getById(id);
-		updateClassify.setClassifyStatus(1);
+		updateClassify.setClassifyStatus(Status.CLASSIFY_RECYCLE.CODE);
 		updateClassify.setClassifyPath("");
 		updateClassify.setClassifyModifyTime(new Date());
 		iClassifyService.update(updateClassify);
-		iBlogService.updateBlogStautsByClassifyId(1,id);
+		iBlogService.updateBlogStautsByClassifyId(Status.CLASSIFY_RECYCLE.CODE,id);
 		updateClassifyAndBLogByClassifyParentId(id,user.getId());
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("classify", updateClassify);
@@ -149,7 +150,7 @@ public class ClassifyController extends BaseController{
 		for (Classify classify : classifys) {
 			classify.setClassifyModifyTime(new Date());
 			classify.setClassifyPath("");
-			classify.setClassifyStatus(1);
+			classify.setClassifyStatus(Status.CLASSIFY_RECYCLE.CODE);
 			iClassifyService.update(classify);
 			iBlogService.updateBlogStautsByClassifyId(1, classify.getId());
 			updateClassifyAndBLogByClassifyParentId(classify.getId(),userId);
@@ -166,13 +167,13 @@ public class ClassifyController extends BaseController{
 		ModelAndView mv = new ModelAndView("classify/folderAndBlog");
 		Classify queryClassify=new Classify();
 		queryClassify.setClassifyParentId(id);
-		queryClassify.setClassifyStatus(0);
+		queryClassify.setClassifyStatus(Status.CLASSIFY_ENABLED.CODE);
 		queryClassify.setClassifyUserId(user.getId());
 		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
 		mv.addObject("classifys", classifys);
 		Blog queryBlog=new Blog();
 		queryBlog.setBlogClassifyId(id);
-		queryBlog.setBlogStatus(0);
+		queryBlog.setBlogStatus(Status.BLOG_ENABLED.CODE);
 		queryBlog.setBlogUserId(user.getId());
 		List<Blog> blogs = iBlogService.getAlls(queryBlog);
 		mv.addObject("blogs", blogs);
