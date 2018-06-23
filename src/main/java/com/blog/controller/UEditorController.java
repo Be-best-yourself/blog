@@ -17,6 +17,7 @@ import com.blog.entity.user.User;
 import com.blog.service.blog.IBlogService;
 import com.blog.service.blog.IBlogTextService;
 import com.blog.service.blog.IClassifyService;
+import com.blog.status.Status;
 
 @Controller
 public class UEditorController extends BaseController {
@@ -41,7 +42,7 @@ public class UEditorController extends BaseController {
 		
 		Classify queryClassify=new Classify();
 		queryClassify.setClassifyUserId(user.getId());
-		queryClassify.setClassifyStatus(0);
+		queryClassify.setClassifyStatus(Status.CLASSIFY_ENABLED.CODE);
 		List<Classify> classifys = iClassifyService.getAlls(queryClassify);
 		mv.addObject("classifys", classifys);
 		if (blogId!=null) {

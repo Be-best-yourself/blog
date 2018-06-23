@@ -12,11 +12,7 @@
 <%@ include file="../../common/css/bootstrap_css.jsp"%>
 <%@ include file="../../common/js/jquery.jsp"%>
 <%@ include file="../../common/js/bootstrap_js.jsp"%>
-<link
-	href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
-	rel="stylesheet" />
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<%@ include file="../../common/select2/select2.jsp" %>
 <title>创作</title>
 <link rel="stylesheet" type="text/css"
 	href="${basePath }/res/css/inc.css" />
@@ -33,7 +29,6 @@
 		</div>
 	</div>
 	<div id="editornone" style="display: none;">${blogText }</div>
-	<%@include file="../../common/loading.jsp"%>
 </body>
 
 </html>

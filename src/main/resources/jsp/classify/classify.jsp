@@ -215,7 +215,22 @@
 			}
 		});
 	}
-
+	//移到回收站
+	function recycleBlog(id) {
+		$.ajax({
+			url : "${basePath}blog/recycle/" + id + ".json",
+			data : null,
+			type : 'post',
+			dataType : 'json',
+			success : function(data) {
+				if (data.blog.blogClassifyId==0) {
+					location.reload();
+				}else {
+					classifyFold(data.blog.blogClassifyId);
+				}
+			}
+		});
+	}
 	
 	function editerBlog(id){
 		window.location.href='${basePath}editor/toUEditor?id='+id;
@@ -371,20 +386,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%-- <c:forEach items="${classifys }" var="classify">
-									<tr onclick="classifyFold('${classify.id}')">
-										<td>${classify.classifyName }</td>
-										<td><fmt:formatDate value="${classify.classifyCreateTime }" type="date"
-												pattern="yyyy-MM-dd HH:mm" /></td>
-									</tr>
-								</c:forEach> --%>
 								<c:forEach items="${blogs }" var="blog">
 									<tr onclick="javascript:void(0)">
 										<td><a href="${basePath }/blog/${blog.id }" target="_blank">${blog.blogName }</a></td>
 										<td><fmt:formatDate value="${blog.blogCreateTime }"
 												type="date" pattern="yyyy-MM-dd HH:mm" /></td>
 										<td><a href="javascript:void(0)" onclick="editerBlog('${blog.id}')">编辑</a>
-										<a href="javascript:void(0)" onclick="deleteBlog('${blog.id}')">删除</a></td>
+										<a href="javascript:void(0)" onclick="recycleBlog('${blog.id}')">删除</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>
