@@ -8,4 +8,5 @@ import com.blog.service.impl.BaseServiceImpl;
 
 @Service
 public class UploadFileServiceImpl extends BaseServiceImpl<UploadFile> implements IUploadFileService {
+	
 }
