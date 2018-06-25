@@ -15,7 +15,7 @@
 	<tbody>
 		<c:forEach items="${blogs }" var="blog">
 			<tr onclick="javascript:void(0)">
-				<td><a href="${basePath }/blog/${blog.id }" target="_blank">${blog.blogName }</a></td>
+				<td><a href="${basePath }/article/${blog.id }" target="_blank" title="预览文章">${blog.blogName }</a></td>
 				<td>${blog.blogKeyword }</td>
 				<td><fmt:formatDate value="${blog.blogCreateTime }" type="date"
 						pattern="yyyy-MM-dd HH:mm" /></td>
