@@ -31,7 +31,7 @@ import com.blog.entity.blog.UploadFile;
 import com.blog.entity.user.User;
 import com.blog.service.blog.IUploadFileService;
 import com.blog.utils.Base64Util;
-import com.zfw.runnable.ThreadPoolExecutorTest;
+import com.blog.utils.ThreadPoolExecutorUtil;
 
 @Controller
 @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -52,7 +52,7 @@ public class UEditorConfigController extends BaseController {
 	// multipart文件上传
 	@RequestMapping(value = "/file")
 	public ModelAndView uploadFile(@RequestParam("uploadFile") MultipartFile uploadFile, HttpSession session,
-			HttpServletRequest request) throws IllegalStateException, IOException {
+			HttpServletRequest request) throws IllegalStateException, IOException, InterruptedException {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		ModelAndView mv = new ModelAndView();
 		if (uploadFile.isEmpty()) {
@@ -64,26 +64,25 @@ public class UEditorConfigController extends BaseController {
 					+ String.format("%06d", user.getId())
 					+ originalFilename.substring(originalFilename.indexOf("."), originalFilename.length());
 			String path = new SimpleDateFormat("yyyyMMdd").format(new Date());
-			int fileType=0;
+			int fileType = 0;
 			if (uploadFile.getContentType().contains("image")) {
-				path = "image/"+user.getId()+"/" + path;
+				path = "image/" + user.getId() + "/" + path;
 			} else if (uploadFile.getContentType().contains("video")) {
-				uploadName=originalFilename;
-				path = "video/" +user.getId()+"/" + path;
-				fileType=1;
+				uploadName = originalFilename;
+				path = "video/" + user.getId() + "/" + path;
+				fileType = 1;
 			} else {
-				uploadName=originalFilename;
-				path = "file/"+user.getId()+"/" + path;
-				fileType=2;
+				uploadName = originalFilename;
+				path = "file/" + user.getId() + "/" + path;
+				fileType = 2;
 			}
-
 
 			// 上传到OSS上
 			String key = path + "/" + uploadName;
 			OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-			ThreadPoolExecutorTest
+			ThreadPoolExecutorUtil
 					.doUpLoad(new uploadOSS(ossClient, bucketName, key, null, uploadFile.getInputStream()));
-
+			Thread.sleep(1000);
 			// 保存到数据库
 			UploadFile createUploadFile = new UploadFile();
 			createUploadFile.setUploadCreateTime(new Date());
@@ -101,27 +100,27 @@ public class UEditorConfigController extends BaseController {
 			mv.addObject("size", uploadFile.getSize());
 			mv.addObject("title", uploadName);
 			mv.addObject("type", uploadFile.getContentType());
-			mv.addObject("url",getUrl(key, new Date(new Date().getTime() + 3600 * 1000)));
+			mv.addObject("url", getUrl(key));
 		}
 		return mv;
 	}
-	
-	 private String getUrl(String key,Date expiration){
-         OSSClient ossClient = new OSSClient(endpoint, accessKeyId,accessKeySecret);
-         // 设置URL过期时间为1小时
-        // Date expiration = new Date(new Date().getTime() + 3600 * 1000);
-         GeneratePresignedUrlRequest generatePresignedUrlRequest =new GeneratePresignedUrlRequest(bucketName, key);
-         generatePresignedUrlRequest.setExpiration(expiration);
-         URL url = ossClient.generatePresignedUrl(generatePresignedUrlRequest);
-         return url.toString();
-     }
+
+	private String getUrl(String key) {
+		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+		// 由于当前返回的外链是用户预览页面，为了页面缓存，这里设置过期时间长点，一个月
+		Date expiration = new Date(new Date().getTime() + 30 * 24 * 3600 * 1000);
+		GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, key);
+		generatePresignedUrlRequest.setExpiration(expiration);
+		URL url = ossClient.generatePresignedUrl(generatePresignedUrlRequest);
+		return url.toString();
+	}
 
 	// 涂鸦上传,百度上传上来的是base64
 	@RequestMapping("scrawl")
-	private ModelAndView uploadScrawl(@RequestParam("uploadFile") String base64Str) {
+	private ModelAndView uploadScrawl(@RequestParam("uploadFile") String base64Str) throws InterruptedException {
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		ModelAndView mv = new ModelAndView();
-		String path = "img/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
+		String path = "img/" + user.getId() + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
 		String uploadName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
 				+ String.format("%06d", user.getId()) + ".jpg";
 		File base64ToImgFile = Base64Util.base64ToImgFile(base64Str, uploadName);
@@ -129,8 +128,8 @@ public class UEditorConfigController extends BaseController {
 
 		// 上传到OSS
 		String key = path + "/" + uploadName;
-		ThreadPoolExecutorTest
-				.doUpLoad(new uploadOSS(ossClient, bucketName, key, base64ToImgFile, null));
+		ThreadPoolExecutorUtil.doUpLoad(new uploadOSS(ossClient, bucketName, key, base64ToImgFile, null));
+		Thread.sleep(1000);
 		// 保存到数据库
 		UploadFile createUploadFile = new UploadFile();
 		createUploadFile.setUploadCreateTime(new Date());
@@ -148,7 +147,7 @@ public class UEditorConfigController extends BaseController {
 		mv.addObject("size", base64ToImgFile.length());
 		mv.addObject("title", uploadName);
 		mv.addObject("type", "base64");
-		mv.addObject("url", getUrl(key, new Date(new Date().getTime() + 3600 * 1000)));
+		mv.addObject("url", getUrl(key));
 		return mv;
 	}
 
@@ -188,7 +187,7 @@ public class UEditorConfigController extends BaseController {
 
 	// Ueditor图片列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView listImage(int fileType,int start, int size) {
+	public ModelAndView listImage(int fileType, int start, int size) {
 		UploadFile queryUploadFile = new UploadFile();
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		queryUploadFile.setUploadUserId(user.getId());
@@ -196,11 +195,11 @@ public class UEditorConfigController extends BaseController {
 		List<UploadFile> uploadFiles = iUploadFileService.getAlls(queryUploadFile);
 		List<BaiduUediter> list = new ArrayList<>();
 		for (UploadFile uploadFile : uploadFiles) {
-				String uploadUrl = uploadFile.getUploadUrl();
-				BaiduUediter uediterStatue = new BaiduUediter();
-				uediterStatue.setState("SUCCESS");
-				uediterStatue.setUrl(getUrl(uploadUrl, new Date(new Date().getTime() + 3600 * 1000)));
-				list.add(uediterStatue);
+			String uploadUrl = uploadFile.getUploadUrl();
+			BaiduUediter uediterStatue = new BaiduUediter();
+			uediterStatue.setState("SUCCESS");
+			uediterStatue.setUrl(getUrl(uploadUrl));
+			list.add(uediterStatue);
 		}
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("start", 0);
@@ -209,18 +208,25 @@ public class UEditorConfigController extends BaseController {
 		mv.addObject("list", list);
 		return mv;
 	}
+
 	// Ueditor远程抓取
 	@RequestMapping(value = "/catchimage", method = RequestMethod.POST)
 	public ModelAndView catchimage(HttpServletRequest request) {
 		String source = getParam(request).get("source[]");
-		String url = source.substring(source.indexOf("com/"),source.indexOf("?")).substring(4);
+		String url = source.substring(source.indexOf("com/"), source.indexOf("?")).substring(4);
 		logger.info(url);
-		/*{"state": "SUCCESS", list: [{"state": "SUCCESS","size": "281359","source": "http://blog-uploadfile-test.oss-cn-beijing.aliyuncs.com/image/1/20180619/20180619095810163000001.gif?Expires=1529569315&OSSAccessKeyId=LTAI0GiBUUs19jRn&Signature=oOObTEjjTZ1FupVxORZFXgdlL2Q%3D","title": "1529565741608042285.gif","url": "/ueditor/jsp/upload/image/20180621/1529565741608042285.gif"} ]}*/
+		/*
+		 * {"state": "SUCCESS", list: [{"state": "SUCCESS","size":
+		 * "281359","source":
+		 * "http://blog-uploadfile-test.oss-cn-beijing.aliyuncs.com/image/1/20180619/20180619095810163000001.gif?Expires=1529569315&OSSAccessKeyId=LTAI0GiBUUs19jRn&Signature=oOObTEjjTZ1FupVxORZFXgdlL2Q%3D"
+		 * ,"title": "1529565741608042285.gif","url":
+		 * "/ueditor/jsp/upload/image/20180621/1529565741608042285.gif"} ]}
+		 */
 		List<BaiduUediter> list = new ArrayList<>();
-		BaiduUediter uediterStatue=new BaiduUediter();
+		BaiduUediter uediterStatue = new BaiduUediter();
 		uediterStatue.setState("SUCCESS");
 		uediterStatue.setSource(source);
-		uediterStatue.setUrl(getUrl(url, new Date(new Date().getTime() + 3600 * 1000)));
+		uediterStatue.setUrl(getUrl(url));
 		list.add(uediterStatue);
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("state", "SUCCESS");
