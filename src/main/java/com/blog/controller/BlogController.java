@@ -32,7 +32,6 @@ public class BlogController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		Subject currenUser = SecurityUtils.getSubject();
 		User user = (User) currenUser.getPrincipal();
-
 		try {
 			BlogText createBlogText = new BlogText();
 			Blog updateOrAddBlog = new Blog();
