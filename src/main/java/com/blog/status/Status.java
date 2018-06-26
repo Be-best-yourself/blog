@@ -4,7 +4,7 @@ public enum Status {
 	//enabled disabled 
 	
 	CLASSIFY_ENABLED(0,"可用","enabled"),
-	CLASSIFY_RECYCLE(1,"可用","recycle"),
+	CLASSIFY_RECYCLE(1,"回收","recycle"),
 	
 	BLOG_ENABLED(0,"可用","enabled"),
 	BLOG_RECYCLE(1,"回收站","recycle"),

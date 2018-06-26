@@ -1,17 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
-<%@include file="../common/basePath.jsp"%>
+<%@include file="../../common/basePath.jsp"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="../common/css/bootstrap_css.jsp"%>
-<%@include file="../common/js/jquery.jsp"%>
-<%@include file="../common/js/bootstrap_js.jsp"%>
-<title>模板</title>
+<%@include file="../../common/js/jquery.jsp"%>
+<title>-文章千古事</title>
 <style type="text/css">
 header {
 	height: 50px;
@@ -105,13 +102,6 @@ header {
 		</div>
 	</header>
 	<article class="container">
-		<shiro:hasRole name="admin">admin</shiro:hasRole>
-		
-		<form action="${basePath }upload/file" method="post" enctype="multipart/form-data">
-		<input id="file" type="file" name="uploadFile" multiple="multiple"/>
-		<input id="btn" type="text" value="上传">
-		</form>
-		
 		
 	</article>
 	<footer>脚</footer>

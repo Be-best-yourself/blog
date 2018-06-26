@@ -26,14 +26,19 @@ public class UserController extends BaseController {
 	@Autowired
 	private IUserService iUserService;
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView home() {
+		return new ModelAndView("redirect:/user/toLogin");
+	}
+
 	@RequestMapping("/isSessionTimeOut")
 	public ModelAndView isSessionTimeOut() {
 		ModelAndView mv = new ModelAndView();
-		Subject currenUser= SecurityUtils.getSubject();
+		Subject currenUser = SecurityUtils.getSubject();
 		mv.addObject("result", currenUser.getPrincipal() instanceof User);
 		return mv;
 	}
-	
+
 	// 转到用户注册
 	@RequestMapping("/user/toRegister")
 	public ModelAndView toRegister() {
@@ -45,7 +50,7 @@ public class UserController extends BaseController {
 	public ModelAndView registerUser(User user) {
 		SimpleHash userMD5Password = new SimpleHash("MD5", ByteSource.Util.bytes(user.getUserPassword()));
 		SimpleHash userSaltPassword = new SimpleHash("MD5", user.getUserPassword(),
-				ByteSource.Util.bytes(user.getUserName()), 1024);
+				ByteSource.Util.bytes(user.getUserName()), 2);
 		ModelAndView mv = new ModelAndView();
 		user.setUserPassword(userMD5Password.toString());
 		user.setUserPasswordSalt(userSaltPassword.toString());
@@ -55,49 +60,51 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
-	
-	//转到用户登录
+
+	// 转到用户登录
 	@RequestMapping("/user/toLogin")
-	public ModelAndView toLogin(){
+	public ModelAndView toLogin() {
 		return new ModelAndView("login");
 	}
-	//用户登录
-	@RequestMapping(value="/user/login",method=RequestMethod.POST)
-	public ModelAndView login(User user){
-		ModelAndView mv = new ModelAndView("index");
-		Subject currenUser= SecurityUtils.getSubject();
+
+	// 用户登录
+	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
+	public ModelAndView login(String userName, String userPassword, Boolean rememberMe) {
+		ModelAndView mv = new ModelAndView();
+		Subject currenUser = SecurityUtils.getSubject();
 		if (!currenUser.isAuthenticated()) {
-			UsernamePasswordToken token=new UsernamePasswordToken(user.getUserName(), user.getUserPassword());
+			UsernamePasswordToken token = new UsernamePasswordToken(userName, userPassword);
+			token.setRememberMe(rememberMe);
 			try {
 				currenUser.login(token);
-			}  catch ( UnknownAccountException uae ) { //用户名未知...  
+				mv.addObject("result", "true");
+			} catch (UnknownAccountException uae) { // 用户名未知...
 				logger.info("用户名不存在");
-				mv.addObject("user", user);
-				mv.setViewName("login");
-			} catch ( IncorrectCredentialsException ice ) {//凭据不正确，例如密码不正确 ...  
+				mv.addObject("result", "用户名不存在");
+			} catch (IncorrectCredentialsException ice) {// 凭据不正确，例如密码不正确 ...
 				logger.info("密码不对");
-				mv.addObject("user", user);
-				mv.setViewName("login");
-			} catch ( LockedAccountException lae ) {
+				mv.addObject("result", "密码不对");
+			} catch (LockedAccountException lae) {
 				logger.info("用户名被锁定");
-				mv.addObject("user", user);
-				mv.setViewName("login");//用户被锁定，例如管理员把某个用户禁用...  
-			} catch ( ExcessiveAttemptsException eae ) {
-				logger.info("次数多余系统指定次数");
-				mv.addObject("user", user);
-				mv.setViewName("login");//尝试认证次数多余系统指定次数 ...  
-			} catch ( AuthenticationException ae ) {  
-				ae.printStackTrace();
+				mv.addObject("result", "用户名被锁定");
+			} catch (ExcessiveAttemptsException eae) {
+				logger.info("尝试次数过多");
+				mv.addObject("result", "尝试次数过多");
+			} catch (AuthenticationException ae) {
 				logger.info("其他未指定异常  ");
-				mv.addObject("user", user);
-				mv.setViewName("login");
-			//其他未指定异常  
-			}  
+				mv.addObject("result", "登录异常");
+			}
 		}
 		return mv;
 	}
+
 	@RequestMapping("/index")
-	public ModelAndView index(HttpServletRequest request){
+	public ModelAndView index(HttpServletRequest request) {
 		return new ModelAndView("index");
+	}
+
+	@RequestMapping("/toLogin")
+	public ModelAndView toLogin(HttpServletRequest request) {
+		return new ModelAndView("login");
 	}
 }

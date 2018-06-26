@@ -19,7 +19,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.blog.dao.user.IUserRoleDao;
 import com.blog.entity.user.Permission;
 import com.blog.entity.user.Role;
 import com.blog.entity.user.User;
@@ -50,24 +49,22 @@ public class ShiroRealm extends AuthorizingRealm {
 		// 获取username
 		String userName = upToken.getUsername();
 		// 从数据库中查询usename
-		User user = new User();
-		user.setUserName(userName);
-		List<User> users = iUserService.getAlls(user);
+		User user = iUserService.getUserForUserName(userName);
 
 		// 用户名不存在异常
-		if (users == null) {
+		if (user == null) {
 			throw new UnknownAccountException();
 		}
 		// 或者其他异常
-		if (users != null && users.get(0).getUserStatus() != 0) {
+		if (user != null && user.getUserStatus() != 0) {
 			throw new LockedAccountException();
 		}
 		// 根据用户的情况，构建AuthenticationInfo对象
 		// 以下信息是从数据库中获取的
 		// principal:认证的实体信息，可以是username,也可以是数据表对应的用户的实体类信息
-		Object principal = users.get(0);
+		Object principal = user;
 		// credentials:密码
-		Object credentials = users.get(0).getUserPasswordSalt();
+		Object credentials = user.getUserPasswordSalt();
 		// 盐值
 		ByteSource credentialsSalt = ByteSource.Util.bytes(userName);
 		// realmName:当前realm对象的name,调用父类的getName()方法即可
@@ -116,7 +113,7 @@ public class ShiroRealm extends AuthorizingRealm {
 		String hashAlgorithmName = "MD5";
 		Object credentials = "123456";
 		Object salt = ByteSource.Util.bytes("zhang5850");
-		int hashIterations = 1024;
+		int hashIterations = 2;
 		SimpleHash hash = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
 		System.out.println(hash.toString());
 	}
