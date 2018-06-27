@@ -7,6 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../common/js/jquery.jsp"%>
+<script src="${basePath}common/js/jquery.md5.js"></script>
 <title>用户登录</title>
 <style type="text/css">
 html body {
@@ -114,7 +115,7 @@ html body {
 				url : '${basePath}user/login.json',
 				data : {
 					'userName' : $userName.val(),
-					'userPassword' : $password.val(),
+					'userPassword' : $.md5($password.val().trim()),
 					'rememberMe' : $("#rememberMe").is(':checked')
 				},
 				type : 'post',
@@ -163,7 +164,7 @@ html body {
 			</div>
 			<div class="loginBtn-div">
 				<button id="loginBtn">登 录</button>
-				还没有帐号？<a href="#">去注册</a>
+				还没有帐号？<a href="${basePath }user/toRegister">去注册</a>
 			</div>
 		</div>
 	</div>

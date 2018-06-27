@@ -149,10 +149,15 @@
 	UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
 	UE.Editor.prototype.getActionUrl = function(action) {
 		//判断路径   这里是config.json 中设置执行上传的action名称
-		if (action == 'uploadimage' || action == 'uploadvideo'
-				|| action == 'uploadfile') {
+		if (action == 'uploadimage') {
 			return '${basePath}upload/file.json';
-		} else if (action == 'uploadscrawl') {
+		} else if (action == 'uploadvideo') {
+			alert("上传视频敬请期待");
+			return;
+		}else if (action == 'uploadfile') {
+			alert("上传附件敬请期待");
+			return;
+		}else if (action == 'uploadscrawl') {
 			return '${basePath}upload/scrawl.json';
 		} else if (action == 'listimage') {
 			return '${basePath}upload/list.json?fileType=0';

@@ -9,6 +9,8 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.codec.CodecException;
+import org.apache.shiro.crypto.UnknownAlgorithmException;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
@@ -44,19 +46,35 @@ public class UserController extends BaseController {
 	public ModelAndView toRegister() {
 		return new ModelAndView("register");
 	}
+	
+	@RequestMapping("/getUserByUserName")
+	public ModelAndView getUserByUserName(String userName){
+		ModelAndView mv = new ModelAndView();
+		User user = iUserService.getUserForUserName(userName);
+		if (user!=null) {
+			mv.addObject("result", true);
+		}else {
+			mv.addObject("result", false);
+		}
+		return mv;
+	}
 
 	// 用户注册
 	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
-	public ModelAndView registerUser(User user) {
-		SimpleHash userMD5Password = new SimpleHash("MD5", ByteSource.Util.bytes(user.getUserPassword()));
-		SimpleHash userSaltPassword = new SimpleHash("MD5", user.getUserPassword(),
-				ByteSource.Util.bytes(user.getUserName()), 2);
+	public ModelAndView registerUser(String userName,String password) {
 		ModelAndView mv = new ModelAndView();
-		user.setUserPassword(userMD5Password.toString());
-		user.setUserPasswordSalt(userSaltPassword.toString());
-		int userId = iUserService.addAndGetId(user);
-		if (userId != 0) {
-			mv.addObject("result", "sucesse");
+		try {
+			SimpleHash userSaltPassword = new SimpleHash("MD5", password,ByteSource.Util.bytes(userName), 2);
+			User user=new User();
+			user.setUserName(userName);
+			user.setUserPassword(password);
+			user.setUserPasswordSalt(userSaltPassword.toString());
+			iUserService.addAndGetId(user);
+			mv.addObject("result", true);
+		} catch (UnknownAlgorithmException e) {
+			mv.addObject("result", false);
+		} catch (CodecException e) {
+			mv.addObject("result", false);
 		}
 		return mv;
 	}
