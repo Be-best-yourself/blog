@@ -2,7 +2,6 @@ package com.blog.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -23,15 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.blog.entity.blog.UploadFile;
 import com.blog.entity.user.User;
 import com.blog.service.blog.IUploadFileService;
+import com.blog.status.Status;
 import com.blog.utils.Base64Util;
-import com.blog.utils.ThreadPoolExecutorUtil;
 
 @Controller
 @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -64,43 +61,44 @@ public class UEditorConfigController extends BaseController {
 					+ String.format("%06d", user.getId())
 					+ originalFilename.substring(originalFilename.indexOf("."), originalFilename.length());
 			String path = new SimpleDateFormat("yyyyMMdd").format(new Date());
-			int fileType = 0;
+			int fileType = Status.FILE_IMAGE.CODE;
 			if (uploadFile.getContentType().contains("image")) {
 				path = "image/" + user.getId() + "/" + path;
 			} else if (uploadFile.getContentType().contains("video")) {
 				uploadName = originalFilename;
 				path = "video/" + user.getId() + "/" + path;
-				fileType = 1;
+				fileType = Status.FILE_VIDEO.CODE;
 			} else {
 				uploadName = originalFilename;
 				path = "file/" + user.getId() + "/" + path;
-				fileType = 2;
+				fileType = Status.FILE_FILE.CODE;
 			}
 
 			// 上传到OSS上
 			String key = path + "/" + uploadName;
 			OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-			ThreadPoolExecutorUtil
-					.doUpLoad(new uploadOSS(ossClient, bucketName, key, null, uploadFile.getInputStream()));
-			Thread.sleep(1000);
-			// 保存到数据库
-			UploadFile createUploadFile = new UploadFile();
-			createUploadFile.setUploadCreateTime(new Date());
-			createUploadFile.setUploadOriginalName(originalFilename);
-			createUploadFile.setUploadSize(uploadFile.getSize());
-			createUploadFile.setUploadTitleName(uploadName);
-			createUploadFile.setUploadType(uploadFile.getContentType());
-			createUploadFile.setUploadUserId(user.getId());
-			createUploadFile.setFileType(fileType);
-			createUploadFile.setUploadUrl(key);
-			iUploadFileService.add(createUploadFile);
-
-			mv.addObject("state", "SUCCESS");
-			mv.addObject("original", originalFilename);
-			mv.addObject("size", uploadFile.getSize());
-			mv.addObject("title", uploadName);
-			mv.addObject("type", uploadFile.getContentType());
-			mv.addObject("url", getUrl(key));
+			try {
+				ossClient.putObject(bucketName, key, uploadFile.getInputStream());
+				// 保存到数据库
+				UploadFile createUploadFile = new UploadFile();
+				createUploadFile.setUploadCreateTime(new Date());
+				createUploadFile.setUploadOriginalName(originalFilename);
+				createUploadFile.setUploadSize(uploadFile.getSize());
+				createUploadFile.setUploadTitleName(uploadName);
+				createUploadFile.setUploadType(uploadFile.getContentType());
+				createUploadFile.setUploadUserId(user.getId());
+				createUploadFile.setFileType(fileType);
+				createUploadFile.setUploadUrl(key);
+				iUploadFileService.add(createUploadFile);
+				mv.addObject("state", "SUCCESS");
+				mv.addObject("original", originalFilename);
+				mv.addObject("size", uploadFile.getSize());
+				mv.addObject("title", uploadName);
+				mv.addObject("type", uploadFile.getContentType());
+				mv.addObject("url", getUrl(key));
+			} finally {
+				ossClient.shutdown();
+			}
 		}
 		return mv;
 	}
@@ -108,7 +106,7 @@ public class UEditorConfigController extends BaseController {
 	private String getUrl(String key) {
 		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 		// 由于当前返回的外链是用户预览页面，为了页面缓存，这里设置过期时间长点，一个月
-		Date expiration = new Date(new Date().getTime() + 30 * 24 * 3600 * 1000);
+		Date expiration = new Date(new Date().getTime() + 7 * 24 * 3600 * 1000);
 		GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, key);
 		generatePresignedUrlRequest.setExpiration(expiration);
 		URL url = ossClient.generatePresignedUrl(generatePresignedUrlRequest);
@@ -118,40 +116,44 @@ public class UEditorConfigController extends BaseController {
 	// 涂鸦上传,百度上传上来的是base64
 	@RequestMapping("scrawl")
 	private ModelAndView uploadScrawl(@RequestParam("uploadFile") String base64Str) throws InterruptedException {
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		ModelAndView mv = new ModelAndView();
-		String path = "img/" + user.getId() + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
-		String uploadName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
-				+ String.format("%06d", user.getId()) + ".jpg";
-		File base64ToImgFile = Base64Util.base64ToImgFile(base64Str, uploadName);
-		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+			User user = (User) SecurityUtils.getSubject().getPrincipal();
+			String path = "image/" + user.getId() + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
+			String uploadName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
+					+ String.format("%06d", user.getId()) + ".jpg";
+			File base64ToImgFile = Base64Util.base64ToImgFile(base64Str, uploadName);
+			OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
-		// 上传到OSS
-		String key = path + "/" + uploadName;
-		ThreadPoolExecutorUtil.doUpLoad(new uploadOSS(ossClient, bucketName, key, base64ToImgFile, null));
-		Thread.sleep(1000);
-		// 保存到数据库
-		UploadFile createUploadFile = new UploadFile();
-		createUploadFile.setUploadCreateTime(new Date());
-		createUploadFile.setUploadOriginalName("base64");
-		createUploadFile.setUploadSize(base64ToImgFile.length());
-		createUploadFile.setUploadTitleName(uploadName);
-		createUploadFile.setUploadType("base64");
-		createUploadFile.setUploadUserId(user.getId());
-		createUploadFile.setFileType(0);
-		createUploadFile.setUploadUrl(key);
-		iUploadFileService.add(createUploadFile);
+			// 上传到OSS
+			String key = path + "/" + uploadName;
+		try {
+			ossClient.putObject(bucketName, key, base64ToImgFile);
 
-		mv.addObject("state", "SUCCESS");
-		mv.addObject("original", "base64");
-		mv.addObject("size", base64ToImgFile.length());
-		mv.addObject("title", uploadName);
-		mv.addObject("type", "base64");
-		mv.addObject("url", getUrl(key));
+			// 保存到数据库
+			UploadFile createUploadFile = new UploadFile();
+			createUploadFile.setUploadCreateTime(new Date());
+			createUploadFile.setUploadOriginalName("base64");
+			createUploadFile.setUploadSize(base64ToImgFile.length());
+			createUploadFile.setUploadTitleName(uploadName);
+			createUploadFile.setUploadType("base64");
+			createUploadFile.setUploadUserId(user.getId());
+			createUploadFile.setFileType(0);
+			createUploadFile.setUploadUrl(key);
+			iUploadFileService.add(createUploadFile);
+
+			mv.addObject("state", "SUCCESS");
+			mv.addObject("original", "base64");
+			mv.addObject("size", base64ToImgFile.length());
+			mv.addObject("title", uploadName);
+			mv.addObject("type", "base64");
+			mv.addObject("url", getUrl(key));
+		}finally {
+			ossClient.shutdown();
+		}
 		return mv;
 	}
 
-	public class uploadOSS implements Runnable {
+	/*  public class uploadOSS implements Runnable {
 		private OSSClient ossClient = null;
 		private String bucketName = null;
 		private String key = null;
@@ -184,7 +186,7 @@ public class UEditorConfigController extends BaseController {
 			}
 		}
 	}
-
+*/
 	// Ueditor图片列表
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView listImage(int fileType, int start, int size) {
