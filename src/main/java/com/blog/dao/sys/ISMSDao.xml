@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.dao.sys.ISMSDao">
+	<resultMap id="BaseResultMap" type="com.blog.entity.sys.SMS">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="sms_phone" jdbcType="VARCHAR" property="smsPhone" />
+		<result column="sms_status" jdbcType="VARCHAR" property="smsStatus" />
+		<result column="sms_type" jdbcType="INTEGER" property="smsType" />
+		<result column="sms_body" jdbcType="VARCHAR" property="smsBody" />
+		<result column="sms_create_time" jdbcType="TIMESTAMP" property="smsCreateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, sms_phone, sms_status, sms_type, sms_body, sms_create_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_sms
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_sms
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.blog.entity.sys.SMS">
+		insert into sys_sms (id, sms_phone, sms_status,
+		sms_type, sms_body, sms_create_time
+		)
+		values (#{id,jdbcType=INTEGER}, #{smsPhone,jdbcType=VARCHAR},
+		#{smsStatus,jdbcType=VARCHAR},
+		#{smsType,jdbcType=INTEGER}, #{smsBody,jdbcType=VARCHAR}, #{smsCreateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.blog.entity.sys.SMS">
+		insert into sys_sms
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="smsPhone != null">
+				sms_phone,
+			</if>
+			<if test="smsStatus != null">
+				sms_status,
+			</if>
+			<if test="smsType != null">
+				sms_type,
+			</if>
+			<if test="smsBody != null">
+				sms_body,
+			</if>
+			<if test="smsCreateTime != null">
+				sms_create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="smsPhone != null">
+				#{smsPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="smsStatus != null">
+				#{smsStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="smsType != null">
+				#{smsType,jdbcType=INTEGER},
+			</if>
+			<if test="smsBody != null">
+				#{smsBody,jdbcType=VARCHAR},
+			</if>
+			<if test="smsCreateTime != null">
+				#{smsCreateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.sys.SMS">
+		update sys_sms
+		<set>
+			<if test="smsPhone != null">
+				sms_phone = #{smsPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="smsStatus != null">
+				sms_status = #{smsStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="smsType != null">
+				sms_type = #{smsType,jdbcType=INTEGER},
+			</if>
+			<if test="smsBody != null">
+				sms_body = #{smsBody,jdbcType=VARCHAR},
+			</if>
+			<if test="smsCreateTime != null">
+				sms_create_time = #{smsCreateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.blog.entity.sys.SMS">
+		update sys_sms
+		set sms_phone = #{smsPhone,jdbcType=VARCHAR},
+		sms_status = #{smsStatus,jdbcType=VARCHAR},
+		sms_type = #{smsType,jdbcType=INTEGER},
+		sms_body = #{smsBody,jdbcType=VARCHAR},
+		sms_create_time = #{smsCreateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectAlls" parameterType="com.blog.entity.user.Role"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_sms
+		<where>
+			<if test="smsPhone != null">
+				and sms_phone = #{smsPhone,jdbcType=VARCHAR}
+			</if>
+			<if test="smsStatus != null">
+				and sms_status = #{smsStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="smsType != null">
+				and sms_type = #{smsType,jdbcType=INTEGER}
+			</if>
+			<if test="smsBody != null">
+				and sms_body = #{smsBody,jdbcType=VARCHAR}
+			</if>
+			<if test="smsCreateTime != null">
+				and sms_create_time = #{smsCreateTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>
