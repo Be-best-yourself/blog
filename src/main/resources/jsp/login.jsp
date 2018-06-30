@@ -153,7 +153,7 @@ html body {
 			<div class="input-div">
 				<img
 					src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530013540674&di=178685c0cbee27f65f850ce2d96d5300&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01b0645a112c1ea80121985c0ea3d0.jpg%401280w_1l_2o_100sh.jpg" />
-				<input id="userName" type="text" placeholder="用户名" name="userName">
+				<input id="userName" type="text" placeholder="用户名/手机号" name="userName">
 			</div>
 			<span class="tip" id="passwordTip">密码不能为空哦</span>
 			<div class="input-div">
