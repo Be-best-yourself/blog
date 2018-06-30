@@ -16,4 +16,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
 	public User getUserForUserName(String userName) {
 		return iUserDao.selectUserForUserName(userName);
 	}
+	@Override
+	public User getUserByPhoneNum(String phoneNum) {
+		return iUserDao.selectUserForPhoneNum(phoneNum);
+	}
 }

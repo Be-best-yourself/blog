@@ -12,6 +12,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.codec.CodecException;
 import org.apache.shiro.crypto.UnknownAlgorithmException;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,15 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home() {
-		return new ModelAndView("redirect:/user/toLogin");
+		ModelAndView mv = new ModelAndView();
+		Subject currenUser = SecurityUtils.getSubject();
+		if (currenUser.getPrincipal() instanceof User) {
+			// TODO 跳转到网站首页URL
+			mv.setViewName("redirect:/editor/toUEditor");
+		} else {
+			mv.setViewName("redirect:/user/toLogin");
+		}
+		return mv;
 	}
 
 	@RequestMapping("/isSessionTimeOut")
@@ -46,14 +55,28 @@ public class UserController extends BaseController {
 	public ModelAndView toRegister() {
 		return new ModelAndView("register");
 	}
-	
+
+	// 查询用户名是否存在
 	@RequestMapping("/getUserByUserName")
-	public ModelAndView getUserByUserName(String userName){
+	public ModelAndView getUserByUserName(String userName) {
 		ModelAndView mv = new ModelAndView();
 		User user = iUserService.getUserForUserName(userName);
-		if (user!=null) {
+		if (user != null) {
 			mv.addObject("result", true);
-		}else {
+		} else {
+			mv.addObject("result", false);
+		}
+		return mv;
+	}
+
+	// 查询手机号是否存在
+	@RequestMapping(value = "/getUserByPhoneNum", method = RequestMethod.GET)
+	public ModelAndView getUserByPhoneNum(String phoneNum) {
+		ModelAndView mv = new ModelAndView();
+		User user = iUserService.getUserByPhoneNum(phoneNum);
+		if (user != null) {
+			mv.addObject("result", true);
+		} else {
 			mv.addObject("result", false);
 		}
 		return mv;
@@ -61,13 +84,20 @@ public class UserController extends BaseController {
 
 	// 用户注册
 	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
-	public ModelAndView registerUser(String userName,String password) {
+	public ModelAndView registerUser(String userName, String password, String validateCode, String phoneNum) {
 		ModelAndView mv = new ModelAndView();
+		Session session = SecurityUtils.getSubject().getSession();
 		try {
-			SimpleHash userSaltPassword = new SimpleHash("MD5", password,ByteSource.Util.bytes(userName), 2);
-			User user=new User();
+			if (session.getAttribute(SystemController.PHONENUM+session.getId()).equals(phoneNum)
+					&& session.getAttribute(SystemController.VALIDATECODE+session.getId()).equals(validateCode)) {
+				mv.addObject("result", false);
+				return mv;
+			}
+			SimpleHash userSaltPassword = new SimpleHash("MD5", password, ByteSource.Util.bytes(userName), 2);
+			User user = new User();
 			user.setUserName(userName);
 			user.setUserPassword(password);
+			user.setUserPhone(phoneNum);
 			user.setUserPasswordSalt(userSaltPassword.toString());
 			iUserService.addAndGetId(user);
 			mv.addObject("result", true);

@@ -77,7 +77,7 @@
 	});
 	/* 开启本地保存 */
 	ue.ready(function() {  
-	    ue.execCommand( 'drafts' ); 
+	    ue.execCommand('drafts'); 
 	}); 
 
 	UE.commands['save'] = {

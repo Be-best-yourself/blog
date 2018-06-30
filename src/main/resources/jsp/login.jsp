@@ -121,6 +121,7 @@ html body {
 				type : 'post',
 				dataType : 'json',
 				success : function(data) {
+					console.log(data)
 					if(data.result=="true"){
 						window.location.replace("${basePath}editor/toUEditor");
 					}else{

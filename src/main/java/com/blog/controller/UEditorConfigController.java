@@ -1,6 +1,6 @@
 package com.blog.controller;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
@@ -28,7 +28,6 @@ import com.blog.entity.blog.UploadFile;
 import com.blog.entity.user.User;
 import com.blog.service.blog.IUploadFileService;
 import com.blog.status.Status;
-import com.blog.utils.Base64Util;
 
 @Controller
 @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -115,35 +114,37 @@ public class UEditorConfigController extends BaseController {
 
 	// 涂鸦上传,百度上传上来的是base64
 	@RequestMapping("scrawl")
-	private ModelAndView uploadScrawl(@RequestParam("uploadFile") String base64Str) throws InterruptedException {
+	private ModelAndView uploadScrawl(@RequestParam("uploadFile") String base64Str) throws InterruptedException, IOException {
 		ModelAndView mv = new ModelAndView();
 			User user = (User) SecurityUtils.getSubject().getPrincipal();
 			String path = "image/" + user.getId() + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
 			String uploadName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
 					+ String.format("%06d", user.getId()) + ".jpg";
-			File base64ToImgFile = Base64Util.base64ToImgFile(base64Str, uploadName);
+			
+			sun.misc.BASE64Decoder base64Decoder=new sun.misc.BASE64Decoder();
+			byte[] b = base64Decoder.decodeBuffer(base64Str);
+			
 			OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-
 			// 上传到OSS
 			String key = path + "/" + uploadName;
 		try {
-			ossClient.putObject(bucketName, key, base64ToImgFile);
+			ossClient.putObject(bucketName, key, new ByteArrayInputStream(b));
 
 			// 保存到数据库
 			UploadFile createUploadFile = new UploadFile();
 			createUploadFile.setUploadCreateTime(new Date());
 			createUploadFile.setUploadOriginalName("base64");
-			createUploadFile.setUploadSize(base64ToImgFile.length());
+			createUploadFile.setUploadSize((long) b.length);
 			createUploadFile.setUploadTitleName(uploadName);
 			createUploadFile.setUploadType("base64");
 			createUploadFile.setUploadUserId(user.getId());
-			createUploadFile.setFileType(0);
+			createUploadFile.setFileType(Status.FILE_IMAGE.CODE);
 			createUploadFile.setUploadUrl(key);
 			iUploadFileService.add(createUploadFile);
 
 			mv.addObject("state", "SUCCESS");
 			mv.addObject("original", "base64");
-			mv.addObject("size", base64ToImgFile.length());
+			mv.addObject("size", (long) b.length);
 			mv.addObject("title", uploadName);
 			mv.addObject("type", "base64");
 			mv.addObject("url", getUrl(key));

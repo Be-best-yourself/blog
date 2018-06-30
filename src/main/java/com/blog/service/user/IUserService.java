@@ -6,4 +6,6 @@ import com.blog.service.IBaseService;
 public interface IUserService extends IBaseService<User>{
 
 	User getUserForUserName(String userName);
+
+	User getUserByPhoneNum(String phoneNum);
 }

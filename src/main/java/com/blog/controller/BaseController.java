@@ -1,14 +1,19 @@
 package com.blog.controller;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ui.ModelMap;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * 基本Controller,放入logger
@@ -66,5 +71,17 @@ public class BaseController {
 	 */
 	protected String getUserAgent(HttpServletRequest request){
 		return request.getHeader("User-Agent");
+	}
+	/**
+	 * 跨域请求调用
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	public void callBackJSONP(ModelMap model,HttpServletRequest request,HttpServletResponse response) throws IOException{
+		String callback = getParam(request).get("callback");
+		Object json = JSON.toJSON(model);
+		response.getWriter().write(callback+"("+json+")");
 	}
 }

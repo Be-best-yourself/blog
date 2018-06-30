@@ -3,6 +3,7 @@ package com.blog.shiro.realms;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -48,8 +49,21 @@ public class ShiroRealm extends AuthorizingRealm {
 		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
 		// 获取username
 		String userName = upToken.getUsername();
+		String phonePattern = "^1[3|4|5|7|8][0-9]\\d{4,8}$";
+
 		// 从数据库中查询usename
-		User user = iUserService.getUserForUserName(userName);
+		User user = null;
+		// 盐值
+		ByteSource credentialsSalt=null;
+		// 手机号登录
+		if (Pattern.matches(phonePattern, userName)) {
+			user = iUserService.getUserByPhoneNum(userName);
+			credentialsSalt = ByteSource.Util.bytes(user.getUserName());
+		} else {
+			//用户名登录
+			user = iUserService.getUserForUserName(userName);
+			credentialsSalt = ByteSource.Util.bytes(userName);
+		}
 
 		// 用户名不存在异常
 		if (user == null) {
@@ -65,8 +79,6 @@ public class ShiroRealm extends AuthorizingRealm {
 		Object principal = user;
 		// credentials:密码
 		Object credentials = user.getUserPasswordSalt();
-		// 盐值
-		ByteSource credentialsSalt = ByteSource.Util.bytes(userName);
 		// realmName:当前realm对象的name,调用父类的getName()方法即可
 		String realmName = getName();
 
@@ -93,7 +105,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			// 设置角色
 			Role role = iRoleService.getById(uR.getRoleId());
 			roles.add(role.getRoleCode());
-			//设置权限
+			// 设置权限
 			String[] PermissionIds = role.getRolePermissionIds().split(",");
 			for (String permissionId : PermissionIds) {
 				Permission permission = iPermissionService.getById(Integer.valueOf(permissionId));
