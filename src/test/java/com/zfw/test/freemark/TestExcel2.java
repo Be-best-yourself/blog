@@ -16,7 +16,6 @@ import freemarker.template.Template;
 public class TestExcel2 {
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(TestExcel2.class.getResource(""));
 		List<TestUser> userList=new ArrayList<TestUser>();
 		TestUser user = new TestUser();
 		user.setUserName("zhang");
@@ -30,7 +29,7 @@ public class TestExcel2 {
 		FileOutputStream out = new FileOutputStream("shengcheng.csv");
 		OutputStreamWriter writer=new OutputStreamWriter(out, "utf-8");
 		//TODO 有问题，路径不对
-		Template template=getTemplate("src/templates","excel3.ftl");
+		Template template=getTemplate("aa","excel3.ftl");
 		template.process(dataModel, writer);
 		writer.flush();
 		writer.close();
@@ -63,8 +62,9 @@ public class TestExcel2 {
 	 * @throws Exception
 	 */
 	public static Template getTemplate(String templateDir,String templateName){
+		String resource = TestExcel2.class.getClassLoader().getResource("templates").getFile();
 		try {
-			Configuration cfg = getConfiguration(templateDir);
+			Configuration cfg = getConfiguration(resource+"/"+templateDir);
 			if (cfg==null) {
 				return null;
 			}
