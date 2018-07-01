@@ -10,6 +10,7 @@
 <script src="${basePath}common/js/jquery.md5.js"></script>
 <script src="${basePath }res/dragvalidate/drag.js"></script>
 <link rel="stylesheet" type="text/css" href="${basePath }res/dragvalidate/drag.css" />
+<link rel="stylesheet" href="${basePath }common/css/font-awesome.css">
 <title>注册</title>
 <style type="text/css">
 html body {
@@ -387,29 +388,28 @@ $('document').ready(function() {
 			
 			<span class="tip" id="userNametip">用户名已存在</span>
 			<div class="input-div">
-				<img
-					src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530013540674&di=178685c0cbee27f65f850ce2d96d5300&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01b0645a112c1ea80121985c0ea3d0.jpg%401280w_1l_2o_100sh.jpg" />
+				<i class="fa fa-user-o fa-2x" aria-hidden="true" style="margin:12px"></i>
 				<input id="userName" type="text" placeholder="用户名" name="userName">
 			</div>
 			
 			<span class="tip" id="phoneNumtip">手机格式不正确</span>
 			<div class="input-div">
-				<img src="${basePath }/res/img/12.png" /> <input id="phoneNum"
-					type="text" placeholder="手机号" name="phoneNum">
-					<input id="sendValidateCode" class="sendValidateCode" type="submit" value="发送验证码" />
+				<i class="fa fa-mobile-phone fa-2x" aria-hidden="true" style="margin:12px"></i>
+				<input id="phoneNum" type="text" placeholder="手机号" name="phoneNum">
+				<input id="sendValidateCode" class="sendValidateCode" type="submit" value="发送验证码" />
 			</div>
 			
 			
 			<span class="tip" id="validateCodetip">验证码错误或已过期</span>
 			<div class="input-div" style="display:none" id="validateCode-div">
-				<img src="${basePath }/res/img/12.png" /> <input id="validateCode"
-					type="text" placeholder="手机验证码" name="validateCode">
+				<i class="fa fa-sort-numeric-asc fa-1x" aria-hidden="true" style="margin:12px"></i>
+				<input id="validateCode" type="text" placeholder="手机验证码" name="validateCode">
 			</div>
 			
 			<span class="tip" id="passwordtip">密码由6-12位字母或数字组成</span>
 			<div class="input-div">
-				<img src="${basePath }/res/img/12.png" /> <input id="password"
-					type="password" placeholder="密码" name="passWord">
+				<i class="fa fa-unlock-alt fa-2x" aria-hidden="true" style="margin:12px"></i>
+				<input id="password" type="password" placeholder="密码" name="passWord">
 			</div>
 			
 			<div class="loginBtn-div">

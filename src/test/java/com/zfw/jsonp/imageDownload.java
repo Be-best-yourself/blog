@@ -16,7 +16,7 @@ public class imageDownload {
 	private File file = null;
 	private InputStream in = null;
     public static void main(String[] args) {
-    	for (i = 0; i < 10000; i++) {
+    	for (i = 0; i < 1000; i++) {
     		String url = "https://picsum.photos/200/300/?image="+i;
     		downloadPicture(url);
     		System.out.println(i);
@@ -29,7 +29,7 @@ public class imageDownload {
             url = new URL(urlList);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
-            ossClient.putObject("blog-uploadfile-test", "system/drag-picture/"+i+".jpg", dataInputStream);
+            ossClient.putObject("blog-uploadfile", "system/drag-picture/"+i+".jpg", dataInputStream);
             dataInputStream.close();
         } catch (MalformedURLException e) {
             e.printStackTrace();

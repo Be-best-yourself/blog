@@ -8,6 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../common/js/jquery.jsp"%>
 <script src="${basePath}common/js/jquery.md5.js"></script>
+<link rel="stylesheet" href="${basePath }common/css/font-awesome.css">
+
 <title>用户登录</title>
 <style type="text/css">
 html body {
@@ -52,10 +54,6 @@ html body {
 	display: inline-flex;
 }
 
-.input-div>img {
-	width: 50px;
-	height: 50px;
-}
 
 .input-div>input {
 	border: none;
@@ -151,17 +149,16 @@ html body {
 			</div>
 			<span class="tip" id="usernameTip">*用户名不能为空哦</span>
 			<div class="input-div">
-				<img
-					src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1530013540674&di=178685c0cbee27f65f850ce2d96d5300&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01b0645a112c1ea80121985c0ea3d0.jpg%401280w_1l_2o_100sh.jpg" />
+				<i class="fa fa-user-o fa-2x" aria-hidden="true" style="margin:12px"></i>
 				<input id="userName" type="text" placeholder="用户名/手机号" name="userName">
 			</div>
 			<span class="tip" id="passwordTip">密码不能为空哦</span>
 			<div class="input-div">
-				<img src="${basePath }/res/img/12.png" /> <input id="password"
-					type="password" placeholder="密码" name="passWord">
+				<i class="fa fa-unlock-alt fa-2x" aria-hidden="true" style="margin:12px"></i>
+				<input id="password" type="password" placeholder="密码" name="passWord">
 			</div>
 			<div class="remeberMe-div">
-				<input type="checkbox" id="rememberMe" name="rememberMe" />记住我 <a href="#">忘记密码？</a>
+				<input type="checkbox" id="rememberMe" name="rememberMe" />记住我 <a href="${basePath }forgetpassword">忘记密码？</a>
 			</div>
 			<div class="loginBtn-div">
 				<button id="loginBtn">登 录</button>

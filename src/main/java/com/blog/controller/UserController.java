@@ -145,6 +145,11 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
+	
+	@RequestMapping("forgetpassword")
+	public ModelAndView forgetPassword(){
+		return new ModelAndView("forgetpassword");
+	}
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpServletRequest request) {

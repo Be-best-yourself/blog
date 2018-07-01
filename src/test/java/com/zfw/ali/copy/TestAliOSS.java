@@ -1,6 +1,7 @@
 package com.zfw.ali.copy;
 
 import java.io.File;
+import java.util.Random;
 
 import com.aliyun.oss.OSSClient;
 
@@ -13,13 +14,12 @@ public class TestAliOSS {
 	static String accessKeyId = "LTAI0GiBUUs19jRn";
 	static String accessKeySecret = "npk3NLqbo87KfQhQoM1OIdg9jDJlIe";
 
-	public static void main(String[] args) {
-
-		// 创建OSSClient实例。
-		OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-		ossClient.putObject("blog-uploadfile-test", "imge/file.jpg",
-				new File("C:\\Users\\zhang\\Desktop\\图片\\big.jpg"));
-		// 关闭Client。
-		ossClient.shutdown();
+	public static void main(String[] args) throws InterruptedException {
+		Random r33=new Random();
+		for (int i = 0; i < 6; i++) {
+			System.out.println(r33.nextInt(32)+1);
+		}
+		Thread.sleep(1000);
+		System.err.println(r33.nextInt(15)+1);
 	}
 }
