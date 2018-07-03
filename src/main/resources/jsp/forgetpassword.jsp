@@ -7,11 +7,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../common/js/jquery.jsp"%>
-<script src="${basePath}common/js/jquery.md5.js"></script>
 <script src="${basePath }res/dragvalidate/drag.js"></script>
 <link rel="stylesheet" type="text/css" href="${basePath }res/dragvalidate/drag.css" />
+<script src="${basePath}common/js/jquery.md5.js"></script>
 <link rel="stylesheet" href="${basePath }common/css/font-awesome.css">
-<title>注册</title>
 <style type="text/css">
 html body {
 	font-size: 14px;
@@ -27,7 +26,7 @@ html body {
 	height: 100%;
 }
 
-.register-body {
+.login-body {
 	width: 340px;
 	height: 100%;
 	padding: 0 20px 20px;
@@ -37,7 +36,7 @@ html body {
 	margin: 70px auto;
 }
 
-.register-body>.register-title {
+.login-body>.login-title {
 	text-align: center;
 	padding-top: 10px;
 	color: #286c8f;
@@ -54,19 +53,9 @@ html body {
 	border: 1px solid #eee;
 	display: inline-flex;
 }
-
 .input-div>img {
 	width: 50px;
 	height: 50px;
-}
-
-.sendValidateCode{
-	cursor: pointer;
-    width: 100px;
-    border-radius: 10px;
-    margin: auto 2px;
-    line-height: 2.5;
-    display:none; 
 }
 .input-div>input {
 	border: none;
@@ -76,27 +65,17 @@ html body {
 	outline: none;
 }
 
-.remeberMe-div {
-	margin-top: 3px;
-}
-
-.remeberMe-div>a {
-	float: right;
-	text-decoration: blink;
-	margin-right: 5px;
-}
-
-.registerBtn-div {
+.forgetBtn-div {
 	text-align: center;
 }
-
-.registerBtn-div>a {
+.forgetBtn-div>a {
 	line-height: 3;
 	/* text-decoration: none; */
 	margin-top: 3px;
 }
 
-.registerBtn-div>button {
+
+.forgetBtn-div>button {
 	width: 98%;
 	background: #286c8f;
 	line-height: 40px;
@@ -106,6 +85,7 @@ html body {
 	color: #fff;
 	border-radius: 4px;
 }
+
 .drag-pop {
 	background-image: -webkit-radial-gradient(center center, ellipse cover, rgba(0, 0, 0, 0.4)
 		0px, rgba(0, 0, 0, 0.5) 100%);
@@ -140,44 +120,9 @@ html body {
     position: absolute;
     top: calc(20% + 220px);
 }
-
 </style>
 <script type="text/javascript">
-	var validateUserName=false;
-	var validatePassword=false;
 	var validatePhoneNumCode=false;
-
-	function testUserName(){
-		$('#userName').blur(function() {
-			var userName=$(this).val();
-			//不能为纯数字
-			var patrn = /^.*[^\d].*$/;
-			//字母或数字
-			var userNamePattern = /^[a-zA-Z0-9]{4,16}$/;
-			if(userNamePattern.test(userName)&&patrn.test(userName)){
-			}else{
-				$('#userNametip').text("用户名由4-16位字母或数字组合，但不能为纯数字");
-				$('#userNametip').css('visibility','visible');
-				$('#userName').focus();
-				return;
-			}
-				
-			$.get('${basePath}getUserByUserName.json?userName='+userName,function(data){
-				if(data.result){
-					$('#userNametip').text("用户名已被注册");
-					$('#userNametip').css('visibility','visible');
-					$('#userName').focus();
-				}else{
-					$('#userNametip').css('visibility','hidden');
-					validateUserName=true;
-				}			
-			});
-		});
-		$('#userName').on('input',function(){
-			$('#userNametip').css('visibility','hidden');
-		});
-	}
-	
 	function testPhoneNum(){
 		var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
 		$('#phoneNum').on('input',function() {
@@ -194,65 +139,44 @@ html body {
 				var phoneNum=$(this).val();
 				$.get('${basePath }getUserByPhoneNum.json?phoneNum='+phoneNum,function(data){
 					if(data.result){
-						$('#phoneNumtip').text("此手机号已被注册");
-						$('#phoneNumtip').css('visibility','visible');
-						$('#phoneNum').focus();
-					}else{
 						 $('#sendValidateCode').show();
 						 $('#validateCode-div').show();
+					}else{
+						 $('#phoneNumtip').text("此手机号未注册");
+						 $('#phoneNumtip').css('visibility','visible');
+						 $('#phoneNum').focus();
 					}			
 				});
-				
-			}
-		});
-	}
-	function testValidateCode(){
-		$('#validateCode').on('input',function(){
-			$('#validateCodetip').css('visibility','hidden');
-		});
-		$('#validateCode').blur(function() {
-			$.ajax({
-				url:'${basePath}compareValidateCode.json',
-				async : false,
-				data:{'validateCode':$(this).val()},
-				type:'post',
-				dataType:'json',
-				success:function(data){
-					if (!data.result) {
-						$('#validateCodetip').css('visibility','visible');
-						return;
-					}else{
-						validatePhoneNumCode=true;
-					}
-				}
-			});
-		});
-	}
-	
-	function testPassword(){
-		$('#password').on('input',function(){
-			$('#passwordtip').css('visibility','hidden');
-		});
-		$('#password').blur(function() {
-			//字母或数字
-			var passwordPattern = /^[a-zA-Z0-9]{6,12}$/;
-			if (!passwordPattern.test($(this).val())) {
-				$('#passwordtip').text("密码由6-12位字母或数字组成");
-				$('#passwordtip').css('visibility','visible');
-				return;
-			}else{
-				validatePassword=true;
 			}
 		});
 	}
 	
+	//从服务器得到令牌
+	function getToken() {
+		var token = '';
+		$.ajax({
+			url : '${basePath}getToken.json',
+			async : false,
+			data : {
+				'tokenid' : $('#phoneNum').val()
+			},
+			type : 'post',
+			dataType : 'json',
+			success : function(data) {
+				token = data.token;
+			}
+		});
+		return token;
+	}
 	
 	//展示拖动验证码
 	function showdragValidate(token) {
+		$('#msg').html("发送验证码");
+		$('#drag-pop').show(500);
 		jigsaw.init(document.getElementById('drag'), function() {
 			token.split("-");
 			$.ajax({
-				url : '${basePath}sendSMS.json',
+				url : '${basePath}sendForgetPasswordsms.json',
 				data : {
 					'token' : token.split("-")[0],
 					'phoneNum' : token.split("-")[1]
@@ -281,10 +205,31 @@ html body {
 		}, function() {
 			console.log("验证失败");
 		});
-		$('#msg').html("发送验证码");
-		$('#drag-pop').show(500);
 	}
-
+	
+	
+	function testValidateCode(){
+		$('#validateCode').on('input',function(){
+			$('#validateCodetip').css('visibility','hidden');
+		});
+		$('#validateCode').blur(function() {
+			$.ajax({
+				url:'${basePath}compareValidateCode.json',
+				async : false,
+				data:{'validateCode':$(this).val()},
+				type:'post',
+				dataType:'json',
+				success:function(data){
+					if (!data.result) {
+						$('#validateCodetip').css('visibility','visible');
+						return;
+					}else{
+						validatePhoneNumCode=true;
+					}
+				}
+			});
+		});
+	}
 	//定时器
 	function timing(time, obj) {
 		obj.val(time + "秒后重新发送");
@@ -302,101 +247,60 @@ html body {
 		}, 1000);
 	}
 
-	//从服务器得到令牌
-	function getToken() {
-		var token = '';
-		$.ajax({
-			url : '${basePath}getToken.json',
-			async : false,
-			data : {
-				'tokenid' : $('#phoneNum').val()
-			},
-			type : 'post',
-			dataType : 'json',
-			success : function(data) {
-				token = data.token;
-			}
-		});
-		return token;
-	}
 	
-$('document').ready(function() {
-	testUserName();
-	testPhoneNum();
-	testValidateCode();
-	testPassword();
-	$('#registerBtn').click(function() {
-		var md5Password = $.md5($("#password").val().trim());
-		if (!validateUserName) {
-			$('#userNametip').text("用户名由4-16位字母或数字组合，但不能为纯数字");
-			$('#userNametip').css('visibility','visible');
-			$('#userName').focus();
-			return;
-		}
-		if (!validatePhoneNumCode) {
-			$('#validateCodetip').css('visibility','visible');
-			return;
-		}
-		if (!validatePassword) {
-			$('#passwordtip').text("密码由6-12位字母或数字组成");
-			$('#passwordtip').css('visibility','visible');
-			$('#password').focus();
-			return;
-		}
-		
-	if (validatePassword&& validateUserName) {
-		
-		$.ajax({
-			url : '${basePath}user/register.json',
-			data : {
-				'userName' : $('#userName').val(),
-				'password' : md5Password,
-				'phoneNum':$('#phoneNum').val(),
-				'validateCode':$('#validateCode').val()
-			},
-			type : 'post',
-			dataType : 'json',
-			success : function(data) {
-				if (data.result) {
-					setTimeout(function() {
-						window.location.replace("${basePath}user/toLogin");
-					},3000);
-					alert("注册成功，三秒后将跳到登录界面");
-				}else{
-					alert("");
-				}
-			}
+	$(document).ready(function(){
+		testPhoneNum();
+		testValidateCode();
+		$("#sendValidateCode").click(function() {
+			var token= getToken();
+			showdragValidate(token);
 		});
-	}
-});
-
-	$("#sendValidateCode").click(function() {
-		var token= getToken();
-		showdragValidate(token);
-	});
-
-});
-</script>
-</head>
-
-<body>
-	<div>
-		<div class="register-body">
-			<div class="register-title">
-				<h1>注册</h1>
-			</div>
+		
+		$('.drag-pop').click(function(){
+			$('#drag-pop').hide();
+			$('#drag').empty();
+		});
+		$('#forgetBtn').click(function(){
+			if (!validatePhoneNumCode) {
+				$('#validateCodetip').css('visibility','visible');
+				return;
+			}
+			var md5Password = $.md5($("#password").val().trim());
+			$.ajax({
+				url : '${basePath}user/resetpwd.json',
+				data : {
+					'password' : md5Password,
+					'phoneNum':$('#phoneNum').val(),
+					'validateCode':$('#validateCode').val()
+				},
+				type : 'post',
+				dataType : 'json',
+				success : function(data) {
+					if (data.result) {
+						setTimeout(function() {
+							window.location.replace("${basePath}user/toLogin");
+						},3000);
+						alert("密码重置成功，三秒后将跳到登录界面");
+					}else{
+						alert("重置失败,验证码可能过期，请重新操作");
+					}
+				}
+			});
 			
-			<span class="tip" id="userNametip">用户名已存在</span>
-			<div class="input-div">
-				<i class="fa fa-user-o fa-2x" aria-hidden="true" style="margin:12px"></i>
-				<input id="userName" type="text" placeholder="用户名" name="userName">
+		});
+	});
+</script>
+<title>重设密码？</title>
+<body>
+<div class="login-body">
+			<div class="login-title">
+				<h1>重设密码？</h1>
 			</div>
 			
 			<span class="tip" id="phoneNumtip">手机格式不正确</span>
 			<div class="input-div">
 				<i class="fa fa-mobile-phone fa-2x" aria-hidden="true" style="margin:12px"></i>
 				<input id="phoneNum" type="text" placeholder="手机号" name="phoneNum">
-				<input id="sendValidateCode" class="sendValidateCode" type="submit" value="发送验证码" />
 			</div>
 			
 			
@@ -404,23 +308,22 @@ $('document').ready(function() {
 			<div class="input-div" style="display:none" id="validateCode-div">
 				<i class="fa fa-sort-numeric-asc fa-1x" aria-hidden="true" style="margin:12px"></i>
 				<input id="validateCode" type="text" placeholder="手机验证码" name="validateCode">
+				<input id="sendValidateCode" class="sendValidateCode" type="submit" value="发送验证码" />
 			</div>
 			
 			<span class="tip" id="passwordtip">密码由6-12位字母或数字组成</span>
 			<div class="input-div">
 				<i class="fa fa-unlock-alt fa-2x" aria-hidden="true" style="margin:12px"></i>
-				<input id="password" type="password" placeholder="密码" name="passWord">
+				<input id="password" type="password" placeholder="请重设密码" name="passWord">
 			</div>
 			
-			<div class="registerBtn-div">
-				<button id="registerBtn">注 册</button>已有帐号？<a href="${basePath }user/toLogin">去登录</a>
+			<div class="forgetBtn-div">
+				<button id="forgetBtn">确认修改</button><a href="${basePath }">返回首页</a>
 			</div>
 		</div>
-		
 		<div class="drag-pop" id="drag-pop">
 			<div id="drag" class="drag"></div>
   			<div id="msg">提示</div>
 		</div>
-	</div>
 </body>
 </html>

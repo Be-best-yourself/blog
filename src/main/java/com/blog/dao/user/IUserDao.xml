@@ -190,7 +190,7 @@
 		user_id_card = #{userIdCard,jdbcType=VARCHAR},
 		user_status = #{userStatus,jdbcType=INTEGER},
 		user_create_time = #{userCreateTime,jdbcType=TIMESTAMP},
-		user_modify_time = #{userModifyTime,jdbcType=TIMESTAMP}
+		user_modify_time = #{userModifyTime,jdbcType=TIMESTAMP},
 		user_logo = #{userLogo,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>

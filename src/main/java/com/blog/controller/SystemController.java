@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.blog.service.sys.ISMSService;
+import com.blog.status.Status;
 import com.blog.utils.OSSUtils;
 import com.blog.utils.SMSUtils;
 
@@ -33,8 +34,6 @@ public class SystemController extends BaseController {
 	public static final String PHONENUM = "phoneNum";
 	public static final String UUIDKEY = "token";
 	public static final String VALIDATECODE = "validateCode";
-	
-	
 
 	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(50);
 
@@ -46,7 +45,7 @@ public class SystemController extends BaseController {
 	private String secretAccessKey;
 	@Value("${ali.oss.bucketName}")
 	private String bucketName;
-	
+
 	@Autowired
 	private ISMSService iSMSService;
 
@@ -125,9 +124,11 @@ public class SystemController extends BaseController {
 			// 短信缓存10分钟
 			scheduledExecutorService.schedule(new RemoveSessionRunable(session, UUIDKEY + session.getId()), 600,
 					TimeUnit.SECONDS);
-			Map<String, Object> smsData=new HashMap<>();
-			smsData.put("code",validateCode);
-			SMSUtils.sendSMSAndSave(iSMSService, "SMS_138062764", phoneNum, smsData,accessKeyId ,secretAccessKey);
+			Map<String, Object> smsData = new HashMap<>();
+			smsData.put("code", validateCode);
+			logger.info("发短信了："+phoneNum+"====="+validateCode);
+			/*SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_REGISTER.CODE, "SMS_138062764", phoneNum, smsData,
+					accessKeyId, secretAccessKey);*/
 			mv.addObject("result", validateCode);
 		}
 		return mv;
@@ -149,6 +150,34 @@ public class SystemController extends BaseController {
 			mv.addObject("result", false);
 		} else {
 			mv.addObject("result", true);
+		}
+		return mv;
+	}
+
+	
+	// 发送忘记密码验证码
+	@RequestMapping(value = "sendForgetPasswordsms", method = RequestMethod.POST)
+	public ModelAndView sendForgetPasswordCode(String phoneNum, String token) {
+		ModelAndView mv = new ModelAndView();
+		Session session = SecurityUtils.getSubject().getSession();
+		if (session.getAttribute(UUIDKEY + session.getId()) == null
+				|| !session.getAttribute(UUIDKEY + session.getId()).equals(token + "-" + phoneNum)) {
+			// 证明这20秒时间内没有拉对图片
+			mv.addObject("result", false);
+		} else {
+			Random rand = new Random();
+			int validateCode = rand.nextInt(1000000) + 100000;
+			session.setAttribute(VALIDATECODE + session.getId(), validateCode);
+			session.setAttribute(PHONENUM + session.getId(), phoneNum);
+			// 短信缓存2分钟
+			scheduledExecutorService.schedule(new RemoveSessionRunable(session, UUIDKEY + session.getId()), 120,
+					TimeUnit.SECONDS);
+			Map<String, Object> smsData = new HashMap<>();
+			smsData.put("code", validateCode);
+			logger.info("发短信了："+phoneNum+"====="+validateCode);
+			/*SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_FORGETPASSWORD.CODE, "SMS_138073698", phoneNum, smsData,
+					accessKeyId, secretAccessKey);*/
+			mv.addObject("result", validateCode);
 		}
 		return mv;
 	}

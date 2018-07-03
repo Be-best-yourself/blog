@@ -1,5 +1,7 @@
 package com.blog.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
@@ -12,6 +14,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.codec.CodecException;
 import org.apache.shiro.crypto.UnknownAlgorithmException;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
@@ -108,8 +111,41 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
+	
+	// 重置密码
+	@RequestMapping(value = "/user/resetpwd", method = RequestMethod.POST)
+	public ModelAndView resetPassword(String password, String validateCode, String phoneNum) {
+		ModelAndView mv = new ModelAndView();
+		Session session = SecurityUtils.getSubject().getSession();
+		try {
+			if (session.getAttribute(SystemController.PHONENUM+session.getId()).equals(phoneNum)
+					&& session.getAttribute(SystemController.VALIDATECODE+session.getId()).equals(validateCode)) {
+				mv.addObject("result", false);
+				return mv;
+			}
+			User updateUser = iUserService.getUserByPhoneNum(phoneNum);
+			updateUser.setUserPassword(password);
+			SimpleHash userSaltPassword = new SimpleHash("MD5", password, ByteSource.Util.bytes(updateUser.getUserName()), 2);
+			updateUser.setUserPasswordSalt(userSaltPassword.toString());
+			updateUser.setUserModifyTime(new Date());
+			iUserService.update(updateUser);
+			mv.addObject("result", true);
+		} catch (InvalidSessionException e) {
+			e.printStackTrace();
+			mv.addObject("result", false);
+		} catch (UnknownAlgorithmException e) {
+			e.printStackTrace();
+			mv.addObject("result", false);
+		} catch (CodecException e) {
+			e.printStackTrace();
+			mv.addObject("result", false);
+		}
+		return mv;
+	}
+	
+	
 
-	// 转到用户登录
+	// 转到用户登录页面
 	@RequestMapping("/user/toLogin")
 	public ModelAndView toLogin() {
 		return new ModelAndView("login");

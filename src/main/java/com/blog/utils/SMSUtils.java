@@ -29,14 +29,14 @@ public class SMSUtils {
 	 * @param secret
 	 * @return
 	 */
-	public static boolean sendSMSAndSave(ISMSService iSMSService, String templateCode, String phoneNum,
+	public static boolean sendSMSAndSave(ISMSService iSMSService,int smsType, String templateCode, String phoneNum,
 			Map<String, Object> smsData, String accessKeyId, String secret) {
 		SendSmsResponse sendSMS = sendSMS(templateCode,phoneNum, smsData, accessKeyId, secret);
 		SMS createSMS = new SMS();
 		createSMS.setSmsPhone(phoneNum);
 		createSMS.setSmsCreateTime(new Date());
 		createSMS.setSmsStatus(sendSMS.getCode());
-		createSMS.setSmsType(Status.SMS_REGISTER.CODE);
+		createSMS.setSmsType(smsType);
 		createSMS.setSmsBody(FreemarkUtils.processFreemarker("sms", templateCode+".ftl", smsData));
 		iSMSService.add(createSMS);
 		return true;
