@@ -14,7 +14,7 @@ import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 
 public class OSSUtils {
 	/**
-	 * 替换页面中oss外链失效时间
+	 * 替换页面中oss外链失效时间，仅对img标签
 	 * @param html
 	 * @param endpoint
 	 * @param accessKeyId

@@ -2,6 +2,7 @@ package com.blog.utils;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.DefaultAcsClient;
@@ -14,11 +15,13 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.blog.entity.sys.SMS;
 import com.blog.service.sys.ISMSService;
-import com.blog.status.Status;
 
 public class SMSUtils {
+	static Properties property = PropertyUtils.loadingProperty("ali.properties");
 	static final String product = "Dysmsapi";
 	static final String domain = "dysmsapi.aliyuncs.com";
+	static final String accessKeyId = property.getProperty("ali.sms.accessKeyId");
+	static final String accessKeySecret = property.getProperty("ali.sms.accessKeySecret");
 	/**
 	 * 发送短信并保存到数据库
 	 * @param iSMSService
@@ -30,8 +33,8 @@ public class SMSUtils {
 	 * @return
 	 */
 	public static boolean sendSMSAndSave(ISMSService iSMSService,int smsType, String templateCode, String phoneNum,
-			Map<String, Object> smsData, String accessKeyId, String secret) {
-		SendSmsResponse sendSMS = sendSMS(templateCode,phoneNum, smsData, accessKeyId, secret);
+			Map<String, Object> smsData) {
+		SendSmsResponse sendSMS = sendSMS(templateCode,phoneNum, smsData);
 		SMS createSMS = new SMS();
 		createSMS.setSmsPhone(phoneNum);
 		createSMS.setSmsCreateTime(new Date());
@@ -50,8 +53,7 @@ public class SMSUtils {
 	 * @param secret
 	 * @return
 	 */
-	public static SendSmsResponse sendSMS(String templateCode, String phoneNum, Map<String, Object> smsData,
-			String accessKeyId, String secret) {
+	public static SendSmsResponse sendSMS(String templateCode, String phoneNum, Map<String, Object> smsData) {
 		String templateParam = null;
 		if (smsData != null) {
 			templateParam = JSON.toJSONString(smsData);
@@ -65,7 +67,7 @@ public class SMSUtils {
 			System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
 			// 初始化acsClient,暂不支持region化
-			IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, secret);
+			IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
 			DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
 			IAcsClient acsClient = new DefaultAcsClient(profile);
 
@@ -81,10 +83,8 @@ public class SMSUtils {
 			request.setTemplateParam(templateParam);
 			sendSmsResponse = acsClient.getAcsResponse(request);
 		} catch (ServerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClientException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
