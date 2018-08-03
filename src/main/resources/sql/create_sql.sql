@@ -49,18 +49,22 @@ insert into t_role values ('1', 'admin', '系统管理员', '此角色能操作�
 -- -- -- -- -- -- -- -- -- -
 -- -- -博客分类表-- -- -- -
 -- -- -- -- -- -- -- -- -- -
+drop table if exists t_classify;
 create table t_classify (
   id int(11) not null auto_increment,
+  classify_level int(11) default '1' comment '目录级别',
   classify_name varchar(32) not null comment '分类名字，如mysql,java',
+  classify_path varchar(255) not null default '' comment '目录全路径',
+  classify_status int(11) not null default '0' comment '分类状态，默认为0为可用，1为不可用，即在回收站里',
   classify_parent_id int(11) default '0' comment '父类id，默认为0,为第一级分类',
+  classify_user_id int(11) not null comment '此分类归属哪个用户',
+  classify_blog_num int(11) default '0' comment '这个目录下的文章数，暂时不用',
   classify_description varchar(255) default null comment '分类描述',
-  classify_user_id int(11) default null comment '此分类归属哪个用户',
   classify_create_time datetime default null on update current_timestamp comment '分类创建时间',
   classify_modify_time datetime default null on update current_timestamp comment '修改时间',
   primary key (id),
   key classify_user_id (classify_user_id) using hash comment '分类归属哪个用户创建索引'
-) engine=innodb default charset=utf8;
-
+) engine=innodb auto_increment=1 default charset=utf8;
 -- -- -- -- -- -- -- -- -- -
 -- -- -- -博客表-- -- -- -- 
 -- -- -- -- -- -- -- -- -- -
@@ -68,12 +72,12 @@ create table t_blog (
   id int(11) not null auto_increment,
   blog_user_id int(11) default null comment '博客创建用户id',
   blog_text_id int(11) not null default '0' comment '博客内容id',
-  blog_classify_id int(11) default null comment '博客分类id,引用分类表中的id,多个分类以逗号分隔',
+  blog_classify_id int(11) default null comment '博客分类id,引用分类表中的id',
   blog_name varchar(64) not null comment '博文名字',
-  blog_keyword varchar(255) not null comment '博客关键字，写入html中keyword中，方便百度收录',
+  blog_keyword varchar(255) not null comment '博客关键字，写入html中keyword中，方便搜索引擎收录',
   blog_title varchar(64) default null comment '博客标题',
   blog_status int(11) not null default '0' comment 'blog状态，默认0可用，1为不可用，即在回收站，2为草稿',
-  blog_description varchar(255) default null comment '博客描述',
+  blog_description varchar(255) default null comment '博客描述，方便搜索引擎收录',
   blog_create_time datetime default null on update current_timestamp comment '博客创建时间',
   blog_modify_time datetime default null on update current_timestamp comment '博客修改时间',
   primary key (id),
