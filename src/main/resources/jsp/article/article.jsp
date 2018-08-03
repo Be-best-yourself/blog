@@ -12,8 +12,11 @@
 <%@include file="../../common/js/jquery.jsp"%>
 <%@include file="../../common/js/bootstrap_js.jsp"%>
 <title>${blogName }</title>
+<link rel="stylesheet" type="text/css"
+	href="${basePath }/res/css/inc.css" />
 </head>
 <body>
+<%@include file="../include/header.jsp" %>
 	<div class="container">
 		<div>${blogText }</div>
 	</div>
