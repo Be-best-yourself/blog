@@ -3,7 +3,6 @@ package com.blog.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import freemarker.template.Configuration;
@@ -12,13 +11,13 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class FreemarkUtils {
-
+/*
 	public static void main(String[] args) throws Exception {
 		Map<String, Object> dataModel=new HashMap<>();
 		dataModel.put("code", "fdsfsd");
 		String processFreemarker = processFreemarker("sms","SMS_138062764.ftl",dataModel);
 		System.out.println(processFreemarker);
-	}
+	}*/
 	
 	public static String processFreemarker(String templateDir,String templateName,Map<String,Object> dataModel){
 		StringWriter out=new StringWriter();
@@ -60,7 +59,6 @@ public class FreemarkUtils {
 	 */
 	private static Template getTemplate(String templateDir,String templateName){
 		String path = FreemarkUtils.class.getClassLoader().getResource("templates").getFile();
-		System.out.println(path);
 		try {
 			Configuration cfg = getConfiguration(path+"/"+templateDir+"/");
 			if (cfg==null) {
