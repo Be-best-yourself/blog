@@ -127,7 +127,7 @@ public class SystemController extends BaseController {
 			Map<String, Object> smsData = new HashMap<>();
 			smsData.put("code", validateCode);
 			logger.info("发短信了："+phoneNum+"====="+validateCode);
-			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_REGISTER.CODE, "SMS_140721847", phoneNum, smsData);
+			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_REGISTER.CODE, Status.SMS_REGISTER.EN_CODE, phoneNum, smsData);
 			mv.addObject("result", validateCode);
 		}
 		return mv;
@@ -174,7 +174,7 @@ public class SystemController extends BaseController {
 			Map<String, Object> smsData = new HashMap<>();
 			smsData.put("code", validateCode);
 			logger.info("发短信了："+phoneNum+"====="+validateCode);
-			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_FORGETPASSWORD.CODE, "SMS_140726899", phoneNum, smsData);
+			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_FORGETPASSWORD.CODE, Status.SMS_FORGETPASSWORD.EN_CODE, phoneNum, smsData);
 			mv.addObject("result", validateCode);
 		}
 		return mv;
