@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.blog.service.sys.ISMSService;
+import com.blog.status.Status;
 import com.blog.utils.OSSUtils;
+import com.blog.utils.SMSUtils;
 
 @Controller
 public class SystemController extends BaseController {
@@ -125,8 +127,7 @@ public class SystemController extends BaseController {
 			Map<String, Object> smsData = new HashMap<>();
 			smsData.put("code", validateCode);
 			logger.info("发短信了："+phoneNum+"====="+validateCode);
-			/*SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_REGISTER.CODE, "SMS_138062764", phoneNum, smsData,
-					accessKeyId, secretAccessKey);*/
+			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_REGISTER.CODE, Status.SMS_REGISTER.EN_CODE, phoneNum, smsData);
 			mv.addObject("result", validateCode);
 		}
 		return mv;
@@ -173,8 +174,7 @@ public class SystemController extends BaseController {
 			Map<String, Object> smsData = new HashMap<>();
 			smsData.put("code", validateCode);
 			logger.info("发短信了："+phoneNum+"====="+validateCode);
-			/*SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_FORGETPASSWORD.CODE, "SMS_138073698", phoneNum, smsData,
-					accessKeyId, secretAccessKey);*/
+			SMSUtils.sendSMSAndSave(iSMSService, Status.SMS_FORGETPASSWORD.CODE, Status.SMS_FORGETPASSWORD.EN_CODE, phoneNum, smsData);
 			mv.addObject("result", validateCode);
 		}
 		return mv;

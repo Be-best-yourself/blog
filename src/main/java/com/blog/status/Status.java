@@ -17,8 +17,9 @@ public enum Status {
 	FILE_FILE(2,"文件","file"),
 	
 	//短信类型
-	SMS_REGISTER(0,"注册","register"),
-	SMS_FORGETPASSWORD(1,"忘记密码","forgetpassword");
+	SMS_REGISTER(0,"注册","SMS_140721847"),
+	SMS_FORGETPASSWORD(1,"忘记密码","SMS_140726899");
+	
 	
 	//错误代码
 	
