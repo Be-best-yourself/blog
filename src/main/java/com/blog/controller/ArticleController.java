@@ -2,6 +2,8 @@ package com.blog.controller;
 
 import java.util.Date;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.blog.entity.blog.Blog;
 import com.blog.entity.blog.BlogText;
+import com.blog.entity.user.User;
 import com.blog.service.blog.IBlogService;
 import com.blog.service.blog.IBlogTextService;
 import com.blog.status.Status;
@@ -32,10 +35,18 @@ public class ArticleController extends BaseController {
 	private IBlogService iBlogService;
 	@Autowired
 	private IBlogTextService iBlogTextService;
-
+	
+	
 	@RequestMapping("article/{id}")
 	public ModelAndView showArticle(@PathVariable int id) {
 		ModelAndView mv = new ModelAndView("article/article");
+		Subject currenUser= SecurityUtils.getSubject();
+		User user= (User) currenUser.getPrincipal();
+		mv.addObject("result", currenUser.getPrincipal() instanceof User);
+		if (currenUser.getPrincipal() instanceof User) {
+			mv.addObject("userName", user.getUserName());
+			mv.addObject("userLogo", user.getUserLogo());
+		}
 		Blog blog = iBlogService.getById(id);
 		if (blog.getBlogStatus() == Status.BLOG_ENABLED.CODE) {
 			BlogText blogText = iBlogTextService.getById(blog.getBlogTextId());
