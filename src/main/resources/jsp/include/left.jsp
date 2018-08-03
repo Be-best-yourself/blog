@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!--为方便查找修改，将css文件碎片化-->
 <script type="text/javascript">
 	/* 左侧菜单滚动事件 */
 	$(function() {
