@@ -183,3 +183,14 @@ create table sys_dict_item (
   item_modify_time datetime not null on update current_timestamp comment '修改时间',
   primary key (id)
 ) engine=innodb default charset=utf8;
+
+
+create table sys_sms (
+  id int(11) not null auto_increment,
+  sms_phone varchar(32) not null comment '短信发送号码',
+  sms_status varchar(8) not null comment '发送状态',
+  sms_type int(11) not null default '0' comment '短信类型，0默认注册',
+  sms_body varchar(255) not null comment '短信内容',
+  sms_create_time datetime not null on update current_timestamp comment '发送时间',
+  primary key (id)
+) engine=innodb auto_increment=5 default charset=utf8;
