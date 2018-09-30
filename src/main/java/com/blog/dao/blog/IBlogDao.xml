@@ -217,6 +217,7 @@
 				#{blogModifyTime,jdbcType=TIMESTAMP}
 			</if>
 		</where>
+		order by blog_classify_id
 	</select>
 	<update id="updateBlogStautsByClassifyId">
 		update t_blog set blog_status=#{0} where

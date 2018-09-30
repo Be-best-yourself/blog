@@ -56,6 +56,10 @@ public class ArticleController extends BaseController {
 			mv.addObject("blogName", blog.getBlogName());
 			mv.addObject("blogText", blogBody);
 		}
+		String blogKeyword = blog.getBlogKeyword();
+		if(null!=blogKeyword){
+			mv.addObject("keywords", blogKeyword.replaceAll("，", ","));
+		}
 		return mv;
 	}
 

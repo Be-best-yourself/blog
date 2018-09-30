@@ -35,13 +35,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home() {
 		ModelAndView mv = new ModelAndView();
-		Subject currenUser = SecurityUtils.getSubject();
-		if (currenUser.getPrincipal() instanceof User) {
-			// TODO 跳转到网站首页URL
-			mv.setViewName("redirect:/editor/toUEditor");
-		} else {
-			mv.setViewName("redirect:/user/toLogin");
-		}
+		mv.setViewName("redirect:/index");
 		return mv;
 	}
 
@@ -91,8 +85,8 @@ public class UserController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		Session session = SecurityUtils.getSubject().getSession();
 		try {
-			if (session.getAttribute(SystemController.PHONENUM+session.getId()).equals(phoneNum)
-					&& session.getAttribute(SystemController.VALIDATECODE+session.getId()).equals(validateCode)) {
+			if (session.getAttribute(SystemController.PHONENUM + session.getId()).equals(phoneNum)
+					&& session.getAttribute(SystemController.VALIDATECODE + session.getId()).equals(validateCode)) {
 				mv.addObject("result", false);
 				return mv;
 			}
@@ -111,21 +105,22 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
-	
+
 	// 重置密码
 	@RequestMapping(value = "/user/resetpwd", method = RequestMethod.POST)
 	public ModelAndView resetPassword(String password, String validateCode, String phoneNum) {
 		ModelAndView mv = new ModelAndView();
 		Session session = SecurityUtils.getSubject().getSession();
 		try {
-			if (session.getAttribute(SystemController.PHONENUM+session.getId()).equals(phoneNum)
-					&& session.getAttribute(SystemController.VALIDATECODE+session.getId()).equals(validateCode)) {
+			if (session.getAttribute(SystemController.PHONENUM + session.getId()).equals(phoneNum)
+					&& session.getAttribute(SystemController.VALIDATECODE + session.getId()).equals(validateCode)) {
 				mv.addObject("result", false);
 				return mv;
 			}
 			User updateUser = iUserService.getUserByPhoneNum(phoneNum);
 			updateUser.setUserPassword(password);
-			SimpleHash userSaltPassword = new SimpleHash("MD5", password, ByteSource.Util.bytes(updateUser.getUserName()), 2);
+			SimpleHash userSaltPassword = new SimpleHash("MD5", password,
+					ByteSource.Util.bytes(updateUser.getUserName()), 2);
 			updateUser.setUserPasswordSalt(userSaltPassword.toString());
 			updateUser.setUserModifyTime(new Date());
 			iUserService.update(updateUser);
@@ -142,8 +137,6 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
-	
-	
 
 	// 转到用户登录页面
 	@RequestMapping("/user/toLogin")
@@ -181,9 +174,9 @@ public class UserController extends BaseController {
 		}
 		return mv;
 	}
-	
+
 	@RequestMapping("forgetpassword")
-	public ModelAndView forgetPassword(){
+	public ModelAndView forgetPassword() {
 		return new ModelAndView("forgetpassword");
 	}
 

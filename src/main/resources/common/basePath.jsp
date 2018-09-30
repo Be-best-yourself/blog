@@ -7,4 +7,5 @@ String scheme= request.getScheme();
 int port= request.getServerPort();
 String basePath = scheme+"://"+request.getServerName()+":"+port+path+"/";
 request.setAttribute("basePath", basePath);
+pageContext.setAttribute("titileName", "我要秀点技术");
 %>

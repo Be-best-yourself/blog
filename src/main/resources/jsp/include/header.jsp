@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <div class="header">
 	<div class="logo">
-		<a href="${basePath }"><img alt="logo" src="${basePath }/res/img/logo.png"></a>
+		<a href="${basePath }"><img alt="logo"
+			src="${basePath }/res/img/logo.png"></a>
 	</div>
 	<div class="user">
+		
 		<div class="userLogo">
 			<img src="${userLogo }"
 				onerror="javascript:this.src=
