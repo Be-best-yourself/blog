@@ -17,8 +17,8 @@ public class TestJsonP {
 	public static void main(String[] args) throws MalformedURLException, IOException {
 		String html="http://localhost:8080/blog/article/40";
 		String endpoint="http://oss-cn-beijing.aliyuncs.com";
-		String accessKeyId="LTAI0GiBUUs19jR";
-		String accessKeySecret="npk3NLqbo87KfQhQo1OIdg9jDJlIe";
+		String accessKeyId="LTAI0GiBUUs19j";
+		String accessKeySecret="npk3NLqbo87KfQhQo1OId9jDJlIe";
 		Date expiration=new Date(new Date().getTime()+30000);
 		String bucketName="blog-uploadfile-test";
 		replaceHtml(html, endpoint, accessKeyId, accessKeySecret, expiration, bucketName);
