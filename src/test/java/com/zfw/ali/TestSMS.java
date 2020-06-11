@@ -28,7 +28,7 @@ public class TestSMS {
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI0GiBUUs19jRn", "npk3NLqbo87KfQhQoM1OIdg9jDJlIe");
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", "", "");
         DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
