@@ -11,9 +11,6 @@ public class TestAliOSS {
 	static String endpoint = "http://oss-cn-beijing.aliyuncs.com";
 	// 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录
 	// https://ram.console.aliyun.com 创建RAM账号。
-	static String accessKeyId = "LTAI0GiBUUs19jRn";
-	static String accessKeySecret = "npk3NLqbo87KfQhQoM1OIdg9jDJlIe";
-
 	public static void main(String[] args) throws InterruptedException {
 		Random r33=new Random();
 		for (int i = 0; i < 6; i++) {
